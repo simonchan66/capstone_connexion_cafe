@@ -40,17 +40,6 @@ const OrderPage = () => {
         <p>{currentDate.toLocaleString()}</p>
       </header>
 
-      <div className="order-content">
-        <div className="coffee-items">
-          {products.map((product) => (
-            <div key={product.id} className="coffee-item">
-              <img src={product.image} alt={product.item_name} />
-              <p>{product.name}</p>
-              <p>${product.price.toFixed(2)}</p>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };

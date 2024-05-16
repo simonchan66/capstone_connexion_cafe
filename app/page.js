@@ -40,12 +40,6 @@ export default function Page() {
       });
   }
 
-  function handleLanguageChange() {
-    const newLang = lang === "en" ? "zh" : "en";
-    setLang(newLang);
-    document.cookie = `language=${newLang}; path=/`;
-  }
-
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-900 p-4">
       <div className="bg-gray-800 shadow-md rounded-lg p-8 max-w-md w-full">
@@ -128,7 +122,6 @@ export default function Page() {
           </>
         )}
         <button
-          onClick={handleLanguageChange}
           className="mt-6 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
         >
           Switch Language
