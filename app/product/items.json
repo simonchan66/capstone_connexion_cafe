@@ -1,0 +1,14 @@
+{ "products": [
+    {
+        "item_id": {
+          "id": 1,
+          "item_name": "Cappuccino",
+          "price": 3,
+          "category": "Beverage",
+          "description": "An espresso-based coffee drink prepared with steamed milk including a layer of milk foam",
+          "active": true,
+          "image": "https://cdn.pixabay.com/photo/2016/11/29/02/10/caffeine-1866758_1280.jpg"
+        }
+      }
+    ]
+}
