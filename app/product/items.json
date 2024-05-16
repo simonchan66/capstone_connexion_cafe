@@ -5,10 +5,106 @@
           "item_name": "Cappuccino",
           "price": 3,
           "category": "Beverage",
-          "description": "An espresso-based coffee drink prepared with steamed milk including a layer of milk foam",
+          "remark": "",
           "active": true,
-          "image": "https://cdn.pixabay.com/photo/2016/11/29/02/10/caffeine-1866758_1280.jpg"
+          "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
         }
       }
+      ,
+      {
+        "item_id": {
+          "id": 2,
+          "item_name": "Latte",
+          "price": 3,
+          "category": "Beverage",
+          "remark": "",
+          "active": true,
+          "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
+        }
+    }
+        ,
+        {
+        "item_id": {
+          "id": 3,
+          "item_name": "Espresso",
+          "price": 2,
+          "category": "Beverage",
+          "remark": "",
+          "active": true,
+          "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
+        }
+    }
+        ,
+        {
+        "item_id": {
+          "id": 4,
+          "item_name": "Americano",
+          "price": 2,
+          "category": "Beverage",
+          "remark": "",
+          "active": true,
+          "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
+        }
+      }
+        ,
+        {
+            "item_id": {
+            "id": 5,
+            "item_name": "Drip Coffee",
+            "price": 1,
+            "category": "Beverage",
+            "remark": "",
+            "active": true,
+            "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
+            }
+        }
+        ,
+        {
+            "item_id": {
+            "id": 6,
+            "item_name": "Tea",
+            "price": 1,
+            "category": "Beverage",
+            "remark": "An espresso-based coffee drink prepared with steamed milk including a layer of milk foam",
+            "active": true,
+            "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
+            }
+        }
+        ,
+        {
+            "item_id": {
+            "id": 7,
+            "item_name": "Hot Chocolate",
+            "price": 2,
+            "category": "Beverage",
+            "remark": "",
+            "active": true,
+            "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
+            }
+        }
+        ,
+        {
+            "item_id": {
+            "id": 8,
+            "item_name": "HK Milk Tea",
+            "price": 2,
+            "category": "Beverage",
+            "remark": "",
+            "active": true,
+            "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
+            }
+        }
+        ,
+        {
+            "item_id": {
+            "id": 9,
+            "item_name": "$10 prepaid drink card",
+            "price": 10,
+            "category": "Others",
+            "remark": "Can be redeem for $11",
+            "active": true,
+            "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
+            }
+        }
     ]
 }
