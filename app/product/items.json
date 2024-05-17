@@ -65,7 +65,7 @@
             "item_name": "Tea",
             "price": 1,
             "category": "Beverage",
-            "remark": "An espresso-based coffee drink prepared with steamed milk including a layer of milk foam",
+            "remark": "Earl Grey; Camomille Pure; English Breakfast; Irish Breakfast; Green Tea; Japanese Tea",
             "active": true,
             "image": "https://cdn.pixabay.com/photo/2017/10/16/12/30/coming-soon-2857144_640.png"
             }
