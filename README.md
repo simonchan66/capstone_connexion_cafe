@@ -8,9 +8,27 @@ Team members:
 - Suet Ying Kong (Suey)
 - Tat Chun Fok (David)
 
-### introduction
+### Introduction
 
 The [Connexion Café](https://connexion.wccac.net/), located at [Westside Calgary Chinese Alliance Church](https://www.wccac.net/), is a non-profit ministry that aims to provide a space for inter-generational and inter-congregational conversations as well as relationship building. The café operates on a simple and traditional business model, where customers choose from a menu of drinks and snacks, and the sales are recorded manually by the staff using pen and paper. This method reflects the café's dedication to a personal approach in serving its community. However, the café recognizes the potential benefits of upgrading its system to enhance efficiency and improve customer service.
+
+### Progress report
+
+**week 1**
+Contacted WCCAC (Westside Calgary Chinese Alliance Church) for discussion of the desired features of POS app
+
+- Confirmed using React Next.js to develop a web app
+- Use Firebase for authentication
+- Use Firestore for NoSQL database on google cloud
+- Target Device is Samsung tablet A8
+
+**week 2**
+
+- Initiated the project, committed to Github
+- Login Page started
+- Connected to Firebase for Authentication – now using Github login for testing – Oauth set in Github
+- Used [`Vercel`](https://capstone-connexion-cafe.vercel.app/) for immediate and auto deployment
+- Started Home page – split into Components Navigation and Order-page – in progress
 
 ### Information of Next.js
 
