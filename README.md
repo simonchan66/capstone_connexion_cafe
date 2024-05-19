@@ -30,6 +30,8 @@ The [Connexion Café](https://connexion.wccac.net/), located at [Westside Calgar
 - Used [`Vercel`](https://capstone-connexion-cafe.vercel.app/) for immediate and auto deployment
 - Started Home page – split into Components Navigation and Order-page – in progress
 
+---
+
 ### Information of Next.js
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
