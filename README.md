@@ -15,12 +15,12 @@ The [Connexion Café](https://connexion.wccac.net/), located at [Westside Calgar
 ### Progress report
 
 **week 1**
-Contacted WCCAC (Westside Calgary Chinese Alliance Church) for discussion of the desired features of POS app
 
-- Confirmed using React Next.js to develop a web app
-- Use Firebase for authentication
-- Use Firestore for NoSQL database on google cloud
-- Target Device is Samsung tablet A8
+- Contacted WCCAC (Westside Calgary Chinese Alliance Church) for discussion of the desired features of POS app
+  > - Confirmed using React Next.js to develop a web app
+  > - Use Firebase for authentication
+  > - Use Firestore for NoSQL database on google cloud
+  > - Target Device is Samsung tablet A8
 
 **week 2**
 
@@ -29,6 +29,8 @@ Contacted WCCAC (Westside Calgary Chinese Alliance Church) for discussion of the
 - Connected to Firebase for Authentication – now using Github login for testing – Oauth set in Github
 - Used [`Vercel`](https://capstone-connexion-cafe.vercel.app/) for immediate and auto deployment
 - Started Home page – split into Components Navigation and Order-page – in progress
+
+---
 
 ### Information of Next.js
 
