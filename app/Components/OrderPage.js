@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
 
 const OrderPage = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,13 @@ const OrderPage = () => {
     return () => clearInterval(interval); // Clean up the interval on component unmount
   }, []);
 
+
+  const addProductToCart = async (product) => {
+ // to be continued
+  };
+  
+  // this part we fetch the products from the firestore database
+  // adapted from Simon Chan's code from semester 3 web application course
   useEffect(() => {
     const fetchProducts = async () => {
       const db = getFirestore();
@@ -39,7 +47,19 @@ const OrderPage = () => {
         <h1>Connexion Cafe</h1>
         <p>{currentDate.toLocaleString()}</p>
       </header>
-
+      <div className="coffee-items">
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="coffee-item"
+            onClick={() => addProductToCart(product)}
+          >
+            <img src={product.image} alt={product.item_name} />
+            <p>{product.name}</p>
+            <p>${product.price.toFixed(2)}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
