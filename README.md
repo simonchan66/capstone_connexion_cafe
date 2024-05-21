@@ -32,9 +32,11 @@ The [Connexion Café](https://connexion.wccac.net/), located at [Westside Calgar
 
 **week 3**
 
-- Items list(json) added
-- Item move to Firebase
+- Items list(json) added using LOCAL data for testing
+- Items moved to Firestore
+- Integrated firestore into orderpage, now we can map all the products in the page
 - Order page(item list) – in progress
+- Edit page - in progress, so we can easily add products to the database
 
 ---
 
