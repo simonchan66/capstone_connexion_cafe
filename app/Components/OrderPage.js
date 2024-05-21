@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import Items from "../product/items.json";
 
 const OrderPage = () => {
   const [products, setProducts] = useState([]);
@@ -16,7 +17,7 @@ const OrderPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const db = getFirestore();
-      const colRef = collection(db, 'products');
+      const colRef = collection(db, "products");
 
       try {
         const snapshot = await getDocs(colRef);
@@ -26,7 +27,7 @@ const OrderPage = () => {
         }));
         setProducts(productsData);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
       }
     };
 
@@ -39,7 +40,15 @@ const OrderPage = () => {
         <h1>Connexion Cafe</h1>
         <p>{currentDate.toLocaleString()}</p>
       </header>
-
+      <div className="coffee-items">
+        {Items.map((product) => (
+          <div key={product.id} className="coffee-item">
+            <img src={product.image} alt={product.item_name} />
+            <p>{product.name}</p>
+            <p>${product.price.toFixed(2)}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
