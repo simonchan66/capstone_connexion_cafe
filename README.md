@@ -30,6 +30,12 @@ The [Connexion Café](https://connexion.wccac.net/), located at [Westside Calgar
 - Used [`Vercel`](https://capstone-connexion-cafe.vercel.app/) for immediate and auto deployment
 - Started Home page – split into Components Navigation and Order-page – in progress
 
+**week 3**
+
+- Items list(json) added
+- Item move to Firebase
+- Order page(item list) – in progress
+
 ---
 
 ### Information of Next.js
