@@ -107,6 +107,21 @@ const EditProductPage = () => {
             </button>
           </div>
         </div>
+        <div>
+          <h2 className="text-xl font-semibold mb-4 text-white">
+            Existing Products
+          </h2>
+          <table className="w-full table-auto">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 text-left text-gray-400">name</th>
+                <th className="px-4 py-2 text-left text-gray-400">category</th>
+                <th className="px-4 py-2 text-left text-gray-400">price</th>
+                <th className="px-4 py-2 text-left text-gray-400">actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
     </div>
   );
