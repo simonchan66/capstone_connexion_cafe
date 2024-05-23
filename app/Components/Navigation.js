@@ -17,7 +17,7 @@ const Navigation = () => {
           <Link href="/AllStatsPage">Stats</Link>
         </li>
         <li>
-          <Link href="/EditProduct">Edit</Link>
+          <Link href="/Editproduct">Edit</Link>
         </li>
         <li>
           <button
