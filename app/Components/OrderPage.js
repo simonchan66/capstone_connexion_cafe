@@ -20,7 +20,7 @@ const OrderPage = () => {
   };
   
   // this part we fetch the products from the firestore database
-  // adapted from Simon Chan's code from semester 3 web application course
+  // adapted from Simon Chan's code from semester 3 web application course, with assistance from github Copilot
   useEffect(() => {
     const fetchProducts = async () => {
       const db = getFirestore();
