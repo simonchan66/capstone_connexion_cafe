@@ -37,7 +37,8 @@ The [Connexion Café](https://connexion.wccac.net/), located at [Westside Calgar
 - Integrated firestore into orderpage, now we can map all the products in the page
 - Order page(item list) – in progress
 - Edit page - in progress, so we can easily add products to the database
-
+- Done - Add product functions tested successfully
+- Will do -> map all products in edit page and then add a delete button to delete the products +/- modify the products
 ---
 
 ### Information of Next.js
