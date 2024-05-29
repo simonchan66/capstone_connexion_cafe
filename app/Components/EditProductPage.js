@@ -26,12 +26,11 @@ const EditProductPage = () => {
   const [products, setProducts] = useState([]);
 
   // it updates the state of newProduct whenever any input field's value change
-    const handleInputChange = (e) => {
-
-      // destructure name and value from the input field
-      const { name, value } = e.target;
-      setNewProduct({ ...newProduct, [name]: value });
-    };
+  const handleInputChange = (e) => {
+    // destructure name and value from the input field
+    const { name, value } = e.target;
+    setNewProduct({ ...newProduct, [name]: value });
+  };
 
   // it adds the new product to the firestore database products collection
   const handleAddProduct = async () => {
@@ -59,8 +58,8 @@ const EditProductPage = () => {
     }
   };
 
-// Fetch products list from firestore database, directly copy from orderpage.js
-// stored in the products state
+  // Fetch products list from firestore database, directly copy from orderpage.js
+  // stored in the products state
   useEffect(() => {
     const fetchProducts = async () => {
       const db = getFirestore();
@@ -83,11 +82,23 @@ const EditProductPage = () => {
 
   const handleEditProduct = async (product) => {
     //to be continued
-  }
+  };
 
- const  handleDeleteProduct = async (id) => {
-    //to be continued
-  }
+  // it deletes the product from the firestore database products collection
+  const handleDeleteProduct = async (productId) => {
+    const db = getFirestore();
+    // doc is a function that creates a reference to a document in the firestore database
+    const productRef = doc(db, "products", productId);
+
+    try {
+      // deleteDoc is a function that deletes a document from the firestore database
+      await deleteDoc(productRef);
+      alert("Product Deleted Successfully");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      alert("Error Deleting Product");
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-8">
@@ -200,34 +211,31 @@ const EditProductPage = () => {
             </thead>
 
             <tbody>
-                {products.map((product) => (
-                  // map through the products array and display each product in a table row
-                  <tr key={product.id} className="border-b border-gray-700">
-                    <td className="px-4 py-2 text-white">{product.name}</td>
-                    <td className="px-4 py-2 text-white">{product.category}</td>
-                    <td className="px-4 py-2 text-white">
-                      ${product.price.toFixed(2)}
-                    </td>
-                    <td className="px-4 py-2 flex">
-                      <button
-                        onClick={() => handleEditProduct(product)}
-                        className="bg-indigo-500 text-white px-2 py-1 rounded-md hover:bg-indigo-600 transition-colors duration-300 mr-2"
-                      >
-                        {"Edit"}
-                      </button>
-                      <button
-                        onClick={() => handleDeleteProduct(product.id)}
-                        className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors duration-300"
-                      >
-                        {"Delete"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-
-
-
+              {products.map((product) => (
+                // map through the products array and display each product in a table row
+                <tr key={product.id} className="border-b border-gray-700">
+                  <td className="px-4 py-2 text-white">{product.name}</td>
+                  <td className="px-4 py-2 text-white">{product.category}</td>
+                  <td className="px-4 py-2 text-white">
+                    ${product.price.toFixed(2)}
+                  </td>
+                  <td className="px-4 py-2 flex">
+                    <button
+                      onClick={() => handleEditProduct(product)}
+                      className="bg-indigo-500 text-white px-2 py-1 rounded-md hover:bg-indigo-600 transition-colors duration-300 mr-2"
+                    >
+                      {"Edit"}
+                    </button>
+                    <button
+                      onClick={() => handleDeleteProduct(product.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors duration-300"
+                    >
+                      {"Delete"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
