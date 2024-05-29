@@ -80,8 +80,46 @@ const EditProductPage = () => {
     fetchProducts();
   }, []);
 
+  // it sets the editingProduct state to the product that is being edited
+  const [editingProduct, setEditingProduct] = useState(null);
+
+  // edit the product
   const handleEditProduct = async (product) => {
-    //to be continued
+    setEditingProduct(product);
+    setNewProduct({
+      category: product.category,
+      active: product.active,
+      description: product.description,
+      image: product.image,
+      price: product.price,
+      name: product.name,
+    });
+  };
+
+  // it updates the product in the firestore database products collection
+  const handleUpdateProduct = async () => {
+    const db = getFirestore();
+    const productRef = doc(db, "products", editingProduct.id);
+
+    try {
+      await updateDoc(productRef, {
+        ...newProduct,
+        price: parseFloat(newProduct.price),
+      });
+      setEditingProduct(null);
+      setNewProduct({
+        category: "",
+        active: true,
+        description: "",
+        image: "",
+        price: 0,
+        name: "",
+      });
+      alert("Product Updated Successfully");
+    } catch (error) {
+      console.error("Error updating product:", error);
+      alert("Error Updating Product");
+    }
   };
 
   // it deletes the product from the firestore database products collection
