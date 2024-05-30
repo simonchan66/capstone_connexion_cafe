@@ -86,6 +86,7 @@ const EditProductPage = () => {
   // edit the product
   const handleEditProduct = async (product) => {
     setEditingProduct(product);
+    // set the new product state to be the product that is being edited
     setNewProduct({
       category: product.category,
       active: product.active,
@@ -107,6 +108,7 @@ const EditProductPage = () => {
         price: parseFloat(newProduct.price),
       });
       setEditingProduct(null);
+      // set the new product state to be empty
       setNewProduct({
         category: "",
         active: true,
@@ -139,6 +141,7 @@ const EditProductPage = () => {
   };
 
   return (
+    // return the JSX for the EditProductPage component
     <div className="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-8">
       <h1 className="text-3xl font-bold mb-6 text-white">Edit Products</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -277,6 +280,108 @@ const EditProductPage = () => {
           </table>
         </div>
       </div>
+      {editingProduct && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+          <div className="bg-gray-900 rounded-lg p-8">
+            <h2 className="text-xl font-semibold mb-4 text-white">
+              {"Edit Product"}
+            </h2>
+            <div className="mb-4">
+              <label
+                htmlFor="name"
+                className="block font-semibold mb-1 text-white"
+              >
+                {"name"}
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={newProduct.name}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="category"
+                className="block font-semibold mb-1 text-white"
+              >
+                {"category"}
+              </label>
+              <input
+                type="text"
+                id="category"
+                name="category"
+                value={newProduct.category}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="description"
+                className="block font-semibold mb-1 text-white"
+              >
+                {"description"}
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={newProduct.description}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              ></textarea>
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="image"
+                className="block font-semibold mb-1 text-white"
+              >
+                {"imageURL"}
+              </label>
+              <input
+                type="text"
+                id="image"
+                name="image"
+                value={newProduct.image}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="price"
+                className="block font-semibold mb-1 text-white"
+              >
+                {"price"}
+              </label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                value={newProduct.price}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 rounded-md bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setEditingProduct(null)}
+                className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition-colors duration-300 mr-2"
+              >
+                {"cancel"}
+              </button>
+              <button
+                onClick={handleUpdateProduct}
+                className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
+              >
+                {"updateProduct"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
