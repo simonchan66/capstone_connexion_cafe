@@ -40,14 +40,19 @@ The [Connexion Café](https://connexion.wccac.net/), located at [Westside Calgar
 - Done - Add product functions tested successfully
 - Will do -> map all products in edit page and then add a delete button to delete the products +/- modify the products
 
-**week 3**
+**week 4**
+- David - Edit page structure and form
+- David - Delete function
+- David - Edit product function
 
-- Map all products in edit page
-- delete button and edit button function
-- Solved the bug for auto update of products in edit page
-- Started doing the order logic for the main order page
+- Simon - Add product function to database
+- Simon - Map all products in edit page
+- Simon - Solved the bug for auto update of products in edit page
+- Simon - Started doing the order logic for the main order page
+- 
 - Will do -> finish all add and deduct function
 - Will do -> check out function
+- Will do -> add transaction to database
 ---
 
 ### Information of Next.js
