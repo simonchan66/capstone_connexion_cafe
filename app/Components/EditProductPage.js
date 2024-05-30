@@ -51,6 +51,7 @@ const EditProductPage = () => {
         price: 0,
         name: "",
       });
+      fetchProducts();
       alert("Product Added Successfully");
     } catch (error) {
       console.error("Error adding product:", error);
@@ -58,27 +59,29 @@ const EditProductPage = () => {
     }
   };
 
-  // Fetch products list from firestore database, directly copy from orderpage.js
-  // stored in the products state
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const db = getFirestore();
-      const colRef = collection(db, "products");
+// I extracted fetchproducts to outside so it can auto update, delete or add products
+  const fetchProducts = async () => {
+    const db = getFirestore();
+    const colRef = collection(db, "products");
+  
+    try {
+      const snapshot = await getDocs(colRef);
+      const productsData = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setProducts(productsData);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
-      try {
-        const snapshot = await getDocs(colRef);
-        const productsData = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setProducts(productsData);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
 
-    fetchProducts();
-  }, []);
+
+// I have extracted the fetchProducts from useEffect to be used outside
+useEffect(() => {
+  fetchProducts();
+}, []);
 
   // it sets the editingProduct state to the product that is being edited
   const [editingProduct, setEditingProduct] = useState(null);
@@ -118,7 +121,9 @@ const EditProductPage = () => {
         price: 0,
         name: "",
       });
+      fetchProducts();
       alert("Product Updated Successfully");
+      
     } catch (error) {
       console.error("Error updating product:", error);
       alert("Error Updating Product");
@@ -134,6 +139,7 @@ const EditProductPage = () => {
     try {
       // deleteDoc is a function that deletes a document from the firestore database
       await deleteDoc(productRef);
+      fetchProducts();
       alert("Product Deleted Successfully");
     } catch (error) {
       console.error("Error deleting product:", error);
