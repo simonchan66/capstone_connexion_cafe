@@ -34,6 +34,19 @@ const EditProductPage = () => {
 
   // it adds the new product to the firestore database products collection
   const handleAddProduct = async () => {
+    
+  // Check if any input field is empty
+  if (
+    !newProduct.name ||
+    !newProduct.category ||
+    !newProduct.description ||
+    !newProduct.image 
+  ) {
+    alert("Please fill in all the fields.");
+    return;
+  }
+
+
     const db = getFirestore();
     const colRef = collection(db, "products");
 
@@ -103,6 +116,17 @@ useEffect(() => {
 
   // it updates the product in the firestore database products collection
   const handleUpdateProduct = async () => {
+
+  // Check if any input field is empty
+  if (
+    !newProduct.name ||
+    !newProduct.category ||
+    !newProduct.description ||
+    !newProduct.image 
+  ) {
+    alert("Please fill in all the fields.");
+    return;
+  }
     const db = getFirestore();
     const productRef = doc(db, "products", editingProduct.id);
 
