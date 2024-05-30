@@ -85,6 +85,7 @@ const EditProductPage = () => {
 
   // edit the product
   const handleEditProduct = async (product) => {
+
     setEditingProduct(product);
     // set the new product state to be the product that is being edited
     setNewProduct({
@@ -139,16 +140,17 @@ const EditProductPage = () => {
       alert("Error Deleting Product");
     }
   };
-
+  
   return (
     // return the JSX for the EditProductPage component
-    <div className="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-8">
-      <h1 className="text-3xl font-bold mb-6 text-white">Edit Products</h1>
+    <div className="edit-product-page">
+      <header className="page-header">
+        <h1 className="page-heading-1">Edit Products</h1>
+      </header>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <h2 className="text-xl font-semibold mb-4 text-white">
-            Add New Product
-          </h2>
+          <h2 className="page-heading-2">Add New Product</h2>
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -229,10 +231,7 @@ const EditProductPage = () => {
             />
           </div>
           <div className="flex justify-end">
-            <button
-              onClick={handleAddProduct}
-              className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
-            >
+            <button onClick={handleAddProduct} className="page-button">
               Add Product
             </button>
           </div>
@@ -263,13 +262,16 @@ const EditProductPage = () => {
                   <td className="px-4 py-2 flex">
                     <button
                       onClick={() => handleEditProduct(product)}
-                      className="bg-indigo-500 text-white px-2 py-1 rounded-md hover:bg-indigo-600 transition-colors duration-300 mr-2"
+
+                      className="button-edit"
+
                     >
                       {"Edit"}
                     </button>
                     <button
                       onClick={() => handleDeleteProduct(product.id)}
-                      className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors duration-300"
+                      className="button-delete"
+
                     >
                       {"Delete"}
                     </button>
