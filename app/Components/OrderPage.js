@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
+import React, { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
 
 const OrderPage = () => {
   const [products, setProducts] = useState([]);
@@ -14,17 +14,16 @@ const OrderPage = () => {
     return () => clearInterval(interval); // Clean up the interval on component unmount
   }, []);
 
-
   const addProductToCart = async (product) => {
- // to be continued
+    // to be continued
   };
-  
+
   // this part we fetch the products from the firestore database
   // adapted from Simon Chan's code from semester 3 web application course, with assistance from github Copilot
   useEffect(() => {
     const fetchProducts = async () => {
       const db = getFirestore();
-      const colRef = collection(db, 'products');
+      const colRef = collection(db, "products");
 
       try {
         const snapshot = await getDocs(colRef);
@@ -34,7 +33,7 @@ const OrderPage = () => {
         }));
         setProducts(productsData);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
       }
     };
 
@@ -43,8 +42,8 @@ const OrderPage = () => {
 
   return (
     <div className="order-page">
-      <header>
-        <h1>Connexion Cafe</h1>
+      <header className="page-header">
+        <h1 className="page-heading-1">Connexion Cafe</h1>
         <p>{currentDate.toLocaleString()}</p>
       </header>
       <div className="coffee-items">

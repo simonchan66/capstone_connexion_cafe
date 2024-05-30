@@ -1,9 +1,7 @@
 "use client";
-import Link from 'next/link';
+import Link from "next/link";
 
 const Navigation = () => {
-
-
   return (
     <nav>
       <ul>
@@ -20,11 +18,7 @@ const Navigation = () => {
           <Link href="/Editproduct">Edit</Link>
         </li>
         <li>
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          >
-            中文
-          </button>
+          <button>中文</button>
         </li>
       </ul>
     </nav>
