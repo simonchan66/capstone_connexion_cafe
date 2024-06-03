@@ -7,6 +7,7 @@ const OrderPage = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [cart, setCart] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [cashAmount, setCashAmount] = useState(0);
 
   // it's used for updating the current date every second
   useEffect(() => {
@@ -117,6 +118,16 @@ const OrderPage = () => {
     const newCart = cart.filter((cartItem) => cartItem.id !== product.id);
     setCart(newCart);
   };
+
+  useEffect(() => {
+    // Calculate new total amount
+    const newTotalAmount = cart.reduce(
+      (acc, curr) => acc + curr.totalAmount,
+      0
+    );
+    setTotalAmount(newTotalAmount);
+    setCashAmount(newTotalAmount); // Set cash amount to total amount
+  }, [cart]); // Update total amount when cart changes
 
   return (
     <div className="order-page">
