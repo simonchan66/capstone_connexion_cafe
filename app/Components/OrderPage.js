@@ -91,20 +91,30 @@ const OrderPage = () => {
     const newCart = [...cart];
     const productIndex = newCart.findIndex((item) => item.id === product.id);
 
+    // if the product exists in the cart, update the quantity and total amount
     if (productIndex !== -1) {
+      // if the action is increase, increase the quantity and total amount
       if (action === "increase") {
         newCart[productIndex].quantity += 1;
         newCart[productIndex].totalAmount += product.price;
+        // if the action is decrease, decrease the quantity and total amount
       } else if (action === "decrease") {
         if (newCart[productIndex].quantity > 1) {
           newCart[productIndex].quantity -= 1;
           newCart[productIndex].totalAmount -= product.price;
         } else {
+          // if the action is decrease and the quantity is 1, remove the product from the cart
           newCart.splice(productIndex, 1);
         }
       }
     }
 
+    setCart(newCart);
+  };
+
+  // Remove product from the cart
+  const removeProduct = async (product) => {
+    const newCart = cart.filter((cartItem) => cartItem.id !== product.id);
     setCart(newCart);
   };
 
@@ -166,7 +176,12 @@ const OrderPage = () => {
                         -
                       </button>
 
-                      <button className="remove-btn">X</button>
+                      <button
+                        className="remove-btn"
+                        onClick={() => removeProduct(cartProduct)}
+                      >
+                        X
+                      </button>
                     </td>
                   </tr>
                 ))
