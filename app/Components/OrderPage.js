@@ -23,7 +23,7 @@ const OrderPage = () => {
       return i.id === product.id;
     });
 
-    console.log('Product added to cart:', product);
+    console.log("Product added to cart:", product);
     // if the product exists in the cart, update the quantity and total amount
     if (findProductInCart) {
       let newCart = [];
@@ -86,6 +86,28 @@ const OrderPage = () => {
     fetchProducts();
   }, []);
 
+  // Increase or decrease product quantity
+  const updateProductQuantity = (product, action) => {
+    const newCart = [...cart];
+    const productIndex = newCart.findIndex((item) => item.id === product.id);
+
+    if (productIndex !== -1) {
+      if (action === "increase") {
+        newCart[productIndex].quantity += 1;
+        newCart[productIndex].totalAmount += product.price;
+      } else if (action === "decrease") {
+        if (newCart[productIndex].quantity > 1) {
+          newCart[productIndex].quantity -= 1;
+          newCart[productIndex].totalAmount -= product.price;
+        } else {
+          newCart.splice(productIndex, 1);
+        }
+      }
+    }
+
+    setCart(newCart);
+  };
+
   return (
     <div className="order-page">
       <header className="page-header">
@@ -94,82 +116,78 @@ const OrderPage = () => {
       </header>
 
       <div className="order-content">
-
-      <div className="coffee-items">
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className="coffee-item"
-            onClick={() => addProductToCart(product)}
-          >
-            <img src={product.image} alt={product.item_name} />
-            <p>{product.name}</p>
-            <p>${product.price.toFixed(2)}</p>
-          </div>
-        ))}
-
-
-
-      </div>
-      <div className="order-summary">
-              <h2>{'Order Summary'}</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>{'Name'}</th>
-                    <th>{'Price'}</th>
-                    <th>{'Quantity'}</th>
-                    <th>{'Action'}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cart.length > 0 ? (
-                    cart.map((cartProduct, key) => (
-                      <tr key={key}>
-                        <td>{cartProduct.name}</td>
-                        <td>{cartProduct.price}</td>
-                        <td>{cartProduct.quantity}</td>
-                        <td>
-                          <button
-                            className="adj-btn"
-
-                          >
-                            -
-                          </button>
-                          <button
-                            className="adj-btn"
-
-                          >
-                            +
-                          </button>
-                          <button
-                            className="remove-btn"
-                          >
-                            X
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="4">{'No Item In Cart'}</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-  
-              <h3>
-                {'Total Amount'}: ${totalAmount.toFixed(2)}
-              </h3>
-              {totalAmount !== 0 ? (
-                <button className="checkout-btn" >
-                  {'Checkout'}
-                </button>
-              ) : (
-                <p>{'Please Add Product'}</p>
-              )}
+        <div className="coffee-items">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="coffee-item"
+              onClick={() => addProductToCart(product)}
+            >
+              <img src={product.image} alt={product.item_name} />
+              <p>{product.name}</p>
+              <p>${product.price.toFixed(2)}</p>
             </div>
-</div>
+          ))}
+        </div>
+        <div className="order-summary">
+          <h2>{"Order Summary"}</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>{"Name"}</th>
+                <th>{"Price"}</th>
+                <th>{"Quantity"}</th>
+                <th>{"Action"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.length > 0 ? (
+                cart.map((cartProduct, key) => (
+                  <tr key={key}>
+                    <td>{cartProduct.name}</td>
+                    <td>{cartProduct.price}</td>
+                    <td>{cartProduct.quantity}</td>
+                    <td>
+                      <button
+                        className="adj-btn"
+                        onClick={() =>
+                          updateProductQuantity(cartProduct, "increase")
+                        }
+                      >
+                        +
+                      </button>
+
+                      <button
+                        className="adj-btn"
+                        onClick={() =>
+                          updateProductQuantity(cartProduct, "decrease")
+                        }
+                      >
+                        -
+                      </button>
+
+                      <button className="remove-btn">X</button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4">{"No Item In Cart"}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+
+          <h3>
+            {"Total Amount"}: ${totalAmount.toFixed(2)}
+          </h3>
+          {totalAmount !== 0 ? (
+            <button className="checkout-btn">{"Checkout"}</button>
+          ) : (
+            <p>{"Please Add Product"}</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
