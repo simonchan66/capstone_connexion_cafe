@@ -53,6 +53,16 @@ The [Connexion Café](https://connexion.wccac.net/), located at [Westside Calgar
 - Will do -> finish all add and deduct function
 - Will do -> check out function
 - Will do -> add transaction to database
+
+**week 5**
+- David - Add and Deduct products for the order logic
+- David - Delete products from cart
+- David - 
+
+- Simon - All order logic 
+- Simon - Checkout function -> display the checkout details and confirm
+- Simon - Creat transaction data and sent to firebase
+- Simon - Started doing Order Summary
 ---
 
 ### Information of Next.js
