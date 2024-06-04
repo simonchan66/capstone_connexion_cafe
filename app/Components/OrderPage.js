@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
-
+import OrderSummary from "./OrderSummary";
 const OrderPage = () => {
   const [products, setProducts] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -11,6 +11,9 @@ const OrderPage = () => {
   const [checkoutClicked, setCheckoutClicked] = useState(false);
   const [cashAmount, setCashAmount] = useState(0);
   const [voucherAmount, setVoucherAmount] = useState(0);
+  const [showOrderSummary, setShowOrderSummary] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
+  const [orderItems, setOrderItems] = useState([]);
 
 
 
@@ -160,6 +163,7 @@ const OrderPage = () => {
         total_amount: totalAmount,
         cash_amount: cashAmount,
         voucher_amount: voucherAmount,
+        // will use other user data in the future
         user_name: 'default',
         transaction_time: transaction_time.toISOString(),
       };
@@ -169,6 +173,13 @@ const OrderPage = () => {
         const transactionsRef = collection(db, 'transactions');
         await addDoc(transactionsRef, transactionData);
         console.log('Transaction added to Firestore');
+
+
+      // Extract the first 3 numbers of the order ID, which is the time of transaction
+      const orderNumber = order_id.slice(0, 3);
+      setOrderNumber(orderNumber);
+      setOrderItems(order_items);
+      setShowOrderSummary(true);
 
       } catch (error) {
         console.error('Error adding transaction to Firestore:', error);
@@ -185,7 +196,13 @@ const OrderPage = () => {
       alert('Insufficient payment amount.');
     }
   };
-
+  
+  // Continue button of the order summary
+  const handleContinue = () => {
+    setShowOrderSummary(false);
+    setOrderNumber('');
+    setOrderItems([]);
+  };
   // Remove product from the cart
   const removeProduct = async (product) => {
     const newCart = cart.filter((cartItem) => cartItem.id !== product.id);
@@ -349,6 +366,14 @@ const OrderPage = () => {
             </div>
           </div>
         )}
+
+        {showOrderSummary && (
+      <OrderSummary
+        orderNumber={orderNumber}
+        orderItems={orderItems}
+        onContinue={handleContinue}
+      />
+    )}
       </div>
     </div>
   );
