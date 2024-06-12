@@ -34,18 +34,16 @@ const EditProductPage = () => {
 
   // it adds the new product to the firestore database products collection
   const handleAddProduct = async () => {
-    
-  // Check if any input field is empty
-  if (
-    !newProduct.name ||
-    !newProduct.category ||
-    !newProduct.description ||
-    !newProduct.image 
-  ) {
-    alert("Please fill in all the fields.");
-    return;
-  }
-
+    // Check if any input field is empty
+    if (
+      !newProduct.name ||
+      !newProduct.category ||
+      !newProduct.description ||
+      !newProduct.image
+    ) {
+      alert("Please fill in all the fields.");
+      return;
+    }
 
     const db = getFirestore();
     const colRef = collection(db, "products");
@@ -72,11 +70,11 @@ const EditProductPage = () => {
     }
   };
 
-// I extracted fetchproducts to outside so it can auto update, delete or add products
+  // I extracted fetchproducts to outside so it can auto update, delete or add products
   const fetchProducts = async () => {
     const db = getFirestore();
     const colRef = collection(db, "products");
-  
+
     try {
       const snapshot = await getDocs(colRef);
       const productsData = snapshot.docs.map((doc) => ({
@@ -89,19 +87,16 @@ const EditProductPage = () => {
     }
   };
 
-
-
-// I have extracted the fetchProducts from useEffect to be used outside
-useEffect(() => {
-  fetchProducts();
-}, []);
+  // I have extracted the fetchProducts from useEffect to be used outside
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   // it sets the editingProduct state to the product that is being edited
   const [editingProduct, setEditingProduct] = useState(null);
 
   // edit the product
   const handleEditProduct = async (product) => {
-
     setEditingProduct(product);
     // set the new product state to be the product that is being edited
     setNewProduct({
@@ -116,17 +111,16 @@ useEffect(() => {
 
   // it updates the product in the firestore database products collection
   const handleUpdateProduct = async () => {
-
-  // Check if any input field is empty
-  if (
-    !newProduct.name ||
-    !newProduct.category ||
-    !newProduct.description ||
-    !newProduct.image 
-  ) {
-    alert("Please fill in all the fields.");
-    return;
-  }
+    // Check if any input field is empty
+    if (
+      !newProduct.name ||
+      !newProduct.category ||
+      !newProduct.description ||
+      !newProduct.image
+    ) {
+      alert("Please fill in all the fields.");
+      return;
+    }
     const db = getFirestore();
     const productRef = doc(db, "products", editingProduct.id);
 
@@ -147,7 +141,6 @@ useEffect(() => {
       });
       fetchProducts();
       alert("Product Updated Successfully");
-      
     } catch (error) {
       console.error("Error updating product:", error);
       alert("Error Updating Product");
@@ -170,7 +163,7 @@ useEffect(() => {
       alert("Error Deleting Product");
     }
   };
-  
+
   return (
     // return the JSX for the EditProductPage component
     <div className="edit-product-page">
@@ -292,16 +285,13 @@ useEffect(() => {
                   <td className="px-4 py-2 flex">
                     <button
                       onClick={() => handleEditProduct(product)}
-
                       className="button-edit"
-
                     >
                       {"Edit"}
                     </button>
                     <button
                       onClick={() => handleDeleteProduct(product.id)}
                       className="button-delete"
-
                     >
                       {"Delete"}
                     </button>
