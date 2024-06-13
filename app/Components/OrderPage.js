@@ -166,6 +166,7 @@ const OrderPage = () => {
         // will use other user data in the future
         user_name: 'default',
         transaction_time: transaction_time.toISOString(),
+        done: false,
       };
 
       try {
