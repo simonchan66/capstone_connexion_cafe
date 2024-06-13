@@ -24,6 +24,8 @@ const Allstats = () => {
   const [showOrderDetails, setShowOrderDetails] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
+  const [startDate, endDate] = selectedDateRange;
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -58,6 +60,17 @@ const Allstats = () => {
               where("transaction_time", "<=", endOfDayISO)
             )
           );
+        } else if (startDate && endDate) {
+          const startOfDayISO = startDate.toISOString();
+          const endOfDayISO = endDate.toISOString();
+
+          querySnapshot = await getDocs(
+            query(
+              ordersRef,
+              where("transaction_time", ">=", startOfDayISO),
+              where("transaction_time", "<=", endOfDayISO)
+            )
+          );
         } else {
           querySnapshot = await getDocs(ordersRef);
         }
@@ -78,7 +91,7 @@ const Allstats = () => {
     };
 
     fetchOrders();
-  }, [selectedDate]);
+  }, [selectedDate, startDate, endDate]);
 
   const handleShowOrderDetails = (order) => {
     setSelectedOrder(order);
@@ -105,6 +118,27 @@ const Allstats = () => {
     }
   };
 
+  const handleTodayTransactions = () => {
+    const today = new Date();
+    setSelectedDate(today);
+    setSelectedDateRange([null, null]);
+  };
+
+  const handleLast7DaysTransactions = () => {
+    const today = new Date();
+    const last7Days = new Date(today);
+    last7Days.setDate(today.getDate() - 7);
+    setSelectedDateRange([last7Days, today]);
+    setSelectedDate(null);
+  };
+
+  const handleMonthTransactions = () => {
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    setSelectedDateRange([startOfMonth, today]);
+    setSelectedDate(null);
+  };
+
   if (isLoading) {
     return <div className="text-white text-xl">Loading...</div>; // Or a loading spinner, etc.
   }
@@ -113,21 +147,67 @@ const Allstats = () => {
     <div className="order-page">
       <header className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center top-0 z-10">
         <h1 className="text-xl font-semibold">{"orders"}</h1>
-        <div className="items-center">
-          <label
-            htmlFor="datePicker"
-            className="text-sm font-medium text-white mr-2"
+        <div className="flex items-center space-x-4">
+          <div>
+            <label
+              htmlFor="datePicker"
+              className="text-sm font-medium text-white mr-2"
+            >
+              {"Select Date"}:
+            </label>
+            <DatePicker
+              id="datePicker"
+              selected={selectedDate}
+              onChange={(date) => {
+                setSelectedDate(date);
+                setSelectedDateRange([null, null]);
+              }}
+              dateFormat="yyyy-MM-dd"
+              placeholderText={"Select Date"}
+              className="py-1 px-2 border text-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="dateRangePicker"
+              className="text-sm font-medium text-white mr-2"
+            >
+              {"Select Date Range"}:
+            </label>
+            <DatePicker
+              id="dateRangePicker"
+              selected={startDate}
+              onChange={(dates) => {
+                const [start, end] = dates;
+                setSelectedDateRange([start, end]);
+                setSelectedDate(null);
+              }}
+              startDate={startDate}
+              endDate={endDate}
+              selectsRange
+              dateFormat="yyyy-MM-dd"
+              placeholderText={"Select Date Range"}
+              className="py-1 px-2 border text-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+            />
+          </div>
+          <button
+            onClick={handleTodayTransactions}
+            className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
           >
-            {"Select Date"}:
-          </label>
-          <DatePicker
-            id="datePicker"
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat="yyyy-MM-dd"
-            placeholderText={"Select Date"}
-            className="py-1 px-2 border text-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-          />
+            {"Today"}
+          </button>
+          <button
+            onClick={handleLast7DaysTransactions}
+            className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
+          >
+            {"Last 7 Days"}
+          </button>
+          <button
+            onClick={handleMonthTransactions}
+            className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
+          >
+            {"This Month"}
+          </button>
         </div>
       </header>
       <div className="orders-container p-6">
@@ -233,4 +313,5 @@ const Allstats = () => {
     </div>
   );
 };
+
 export default Allstats;
