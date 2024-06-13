@@ -15,6 +15,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { useUserAuth } from "../_utils/auth-context";
 import { useRouter } from "next/navigation";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const Allstats = () => {
   const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
@@ -143,6 +145,43 @@ const Allstats = () => {
     return <div className="text-white text-xl">Loading...</div>; // Or a loading spinner, etc.
   }
 
+  // To generate PDF report, assisted by chatgpt and copilot
+  const generatePdfReport = () => {
+    const doc = new jsPDF();
+
+    // Add title
+    doc.setFontSize(18);
+    doc.text("Transaction Report", 14, 22);
+
+    // Add date range
+    doc.setFontSize(12);
+    const dateRangeText = selectedDate
+      ? `Date: ${selectedDate.toLocaleDateString("en-US")}`
+      : startDate && endDate
+      ? `Date Range: ${startDate.toLocaleDateString("en-US")} - ${endDate.toLocaleDateString("en-US")}`
+      : "All Transactions";
+    doc.text(dateRangeText, 14, 32);
+
+    // Add table
+    const tableData = orders.map((order) => [
+      order.order_id,
+      order.user_name,
+      new Date(order.transaction_time).toLocaleDateString("en-US"),
+      new Date(order.transaction_time).toLocaleTimeString("en-US"),
+      `$${order.total_amount.toFixed(2)}`,
+    ]);
+
+    doc.autoTable({
+      head: [["Order ID", "User", "Date", "Time", "Total Amount"]],
+      body: tableData,
+      startY: 40,
+    });
+
+    // Save the PDF
+    doc.save("transaction_report.pdf");
+  };
+
+
   return (
     <div className="order-page">
       <header className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center top-0 z-10">
@@ -210,6 +249,14 @@ const Allstats = () => {
           </button>
         </div>
       </header>
+      <div className="flex justify-end mt-4 mr-6">
+      <button
+  onClick={generatePdfReport}
+  className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition-colors duration-300"
+>
+  Generate PDF Report
+</button>
+      </div>
       <div className="orders-container p-6">
         {orders.length > 0 ? (
           <div className="overflow-x-auto">
