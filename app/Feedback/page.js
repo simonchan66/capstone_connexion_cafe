@@ -1,8 +1,6 @@
-// app/page.js
+"use client";
 
-"use client"; // Enable client-side interactions (like state management)
-
-import RestaurantFeedbackForm from "./RestaurantFeedbackForm"; // Import the form component
+import RestaurantFeedbackForm from "./RestaurantFeedbackForm";
 
 export default function Home() {
   return (
