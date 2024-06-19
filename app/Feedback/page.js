@@ -1,17 +1,16 @@
-import Navigation from "../Components/Navigation";
-import FeedbackPage from "../Components/FeedbackPage";
+// app/page.js
 
-const Feedback = () => {
+"use client"; // Enable client-side interactions (like state management)
+
+import RestaurantFeedbackForm from "./RestaurantFeedbackForm"; // Import the form component
+
+export default function Home() {
   return (
-    <div className="container">
-      <div className="navigation">
-        <Navigation />
-      </div>
-      <div className="edit-product-page">
-        <FeedbackPage />
-      </div>
-    </div>
+    <main className="bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+      <h1 className="text-3xl font-bold text-gray-800 mb-4">
+        Customer Feedback
+      </h1>
+      <RestaurantFeedbackForm />
+    </main>
   );
-};
-
-export default Feedback;
+}
