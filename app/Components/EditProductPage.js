@@ -313,7 +313,7 @@ const EditProductPage = () => {
                 htmlFor="name"
                 className="block font-semibold mb-1 text-white"
               >
-                {"name"}
+                {"Name"}
               </label>
               <input
                 type="text"
@@ -329,7 +329,7 @@ const EditProductPage = () => {
                 htmlFor="category"
                 className="block font-semibold mb-1 text-white"
               >
-                {"category"}
+                {"Category"}
               </label>
               <input
                 type="text"
@@ -345,7 +345,7 @@ const EditProductPage = () => {
                 htmlFor="description"
                 className="block font-semibold mb-1 text-white"
               >
-                {"description"}
+                {"Description"}
               </label>
               <textarea
                 id="description"
@@ -360,7 +360,7 @@ const EditProductPage = () => {
                 htmlFor="image"
                 className="block font-semibold mb-1 text-white"
               >
-                {"imageURL"}
+                {"Image URL"}
               </label>
               <input
                 type="text"
@@ -376,7 +376,7 @@ const EditProductPage = () => {
                 htmlFor="price"
                 className="block font-semibold mb-1 text-white"
               >
-                {"price"}
+                {"Price"}
               </label>
               <input
                 type="number"
