@@ -226,7 +226,7 @@ const EditProductPage = () => {
               htmlFor="image"
               className="block font-semibold mb-1 text-white"
             >
-              ImageURL
+              Image URL
             </label>
             <input
               type="text"
