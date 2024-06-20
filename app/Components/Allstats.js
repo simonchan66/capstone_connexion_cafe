@@ -136,7 +136,7 @@ const Allstats = () => {
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-800 text-white">
-                  <th className="px-4 py-2">{"orderId"}</th>
+                  <th className="px-4 py-2">{"Order Id"}</th>
                   <th className="px-4 py-2">{"user"}</th>
                   <th className="px-4 py-2">{"date"}</th>
                   <th className="px-4 py-2">{"time"}</th>
