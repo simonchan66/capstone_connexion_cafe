@@ -45,6 +45,9 @@ const RestaurantFeedbackForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    const feedback_time = new Date();
+    const feedback_id = `${feedback_time.getSeconds()}${feedback_time.getMinutes()}${feedback_time.getHours()}${feedback_time.getMonth() + 1}${feedback_time.getDate()}${feedback_time.getFullYear()}`;
+
     // Perform validation assisted with copilot
     let newErrors = {};
   
@@ -88,6 +91,7 @@ const RestaurantFeedbackForm = () => {
         servingTime: formData.servingTime,
         favoriteItems: formData.favoriteItems.map((item) => item.value),
         customerFeedback: formData.customerFeedback,
+        feedback_time: feedback_id,
       });
   
       setSubmitted(true);
