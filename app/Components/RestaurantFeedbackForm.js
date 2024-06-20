@@ -115,7 +115,7 @@ const RestaurantFeedbackForm = () => {
     }));
   };
   return (
-    <div className="container mx-auto mt-10 p-6 bg-gray-800 text-white rounded-md shadow-md">
+    <div className="container mx-auto mt-10 p-6 bg-gray-800 text-white rounded-md shadow-md items-center justify-center">
       {submitted ? (
         <div className="text-green-400">Thank you for your feedback!</div>
       ) : (
@@ -179,11 +179,11 @@ const RestaurantFeedbackForm = () => {
             }
           >
             <option value="">Select</option>
-            <option value="0-5">0-5 mins</option>
-            <option value="5-10">5-10 mins</option>
-            <option value="10-15">10-15 mins</option>
-            <option value="15-30">15-30 mins</option>
-            <option value="30+">More than 30 mins</option>
+              <option value="0-5">0-5 mins</option>
+              <option value="5-10">5-10 mins</option>
+              <option value="10-15">10-15 mins</option>
+              <option value="15-30">15-30 mins</option>
+              <option value="30+">More than 30 mins</option>
           </select>
           {errors.servingTime && (
             <p className="text-red-500 text-sm">{errors.servingTime}</p>
