@@ -2,6 +2,15 @@
 import React, { useState } from "react";
 import StarRating from "react-rating-stars-component";
 import { MultiSelect } from "react-multi-select-component";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 const RestaurantFeedbackForm = () => {
   const [formData, setFormData] = useState({
@@ -31,50 +40,47 @@ const RestaurantFeedbackForm = () => {
     { label: "Hot Chocolate", value: "Hot Chocolate" },
     { label: "HK Milk Tea", value: "HK Milk Tea" },
   ];
+  const db = getFirestore();
+  const colRef = collection(db, "feedback");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Basic validation
-    const newErrors = {};
-    if (!formData.overallRating)
-      newErrors.overallRating = "Please provide an overall rating.";
-    if (
-      formData.ratings &&
-      Object.values(formData.ratings).filter((rating) => rating === 0).length >
-        0
-    ) {
-      // Check if any specific ratings are 0
-      newErrors.ratings = "Please rate all aspects of the restaurant.";
-    }
-    if (!formData.servingTime)
-      newErrors.servingTime = "Please select a serving time.";
-
-    if (Object.keys(newErrors).length > 0) {
+  
+    // Basic validation still applies here
+    if (Object.keys(errors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
+  
     try {
-      // Replace with your actual API submission logic (e.g., using fetch)
-      const response = await fetch("/api/feedback", {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-Type": "application/json" },
-      });
+await addDoc(colRef, {
+  overallRating: formData.overallRating,
+  vibeRating: formData.vibeRating,
+  serviceRating: formData.serviceRating,
+  productRating: formData.productRating,
+  priceRating: formData.priceRating,
+  cleanlinessRating: formData.cleanlinessRating,
+  servingTime: formData.servingTime,
+  favoriteItems: formData.favoriteItems.map((item) => item.value),
+  customerFeedback: formData.customerFeedback,
+});
 
-      if (response.ok) {
-        setSubmitted(true);
-        setFormData({
-          // ... reset form data here
-        });
-        setErrors({});
-      } else {
-        throw new Error("Failed to submit feedback");
-      }
+  
+      setSubmitted(true);
+      setFormData({
+        overallRating: 0,
+        vibeRating: 0,
+        serviceRating: 0,
+        productRating: 0,
+        priceRating: 0,
+        cleanlinessRating: 0,
+        servingTime: "",
+        favoriteItems: [],
+        customerFeedback: "",
+      });
+      setErrors({});
     } catch (error) {
-      console.error("Error submitting feedback:", error);
-      // Handle submission errors (e.g., show an error message to the user)
+      console.error("Error adding document: ", error);
     }
   };
 

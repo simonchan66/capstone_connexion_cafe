@@ -1,6 +1,6 @@
 "use client";
 
-import RestaurantFeedbackForm from "./RestaurantFeedbackForm";
+import RestaurantFeedbackForm from "../Components/RestaurantFeedbackForm";
 
 export default function Home() {
   return (
