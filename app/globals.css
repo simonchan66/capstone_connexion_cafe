@@ -30,6 +30,14 @@ body {
   padding: 0;
 }
 
+.containerdash {
+  display: flex;
+  height: 70vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .navigation {
   flex: 0 0 8%; /* Do not grow, do not shrink, base width is 10% */
   background-color: #222;
@@ -308,48 +316,4 @@ button.adj-btn {
 
 .button-edit:hover {
   background-color: #4F46E5;
-}
-
-.custom-dark-multi-select .dropdown-container {
-  background-color: #333; /* Dark background for the dropdown */
-  color: #ccc; /* Light text for readability */
-  border: 1px solid #444; /* Slightly lighter border for some contrast */
-}
-
-.custom-dark-multi-select .dropdown-heading {
-  background-color: #222; /* Darker background for the dropdown header */
-  color: #ddd;
-}
-
-.custom-dark-multi-select .dropdown-content {
-  background-color: #2a2a2a; /* Slightly different dark shade for the dropdown content */
-  color: #ddd; /* Light text color for items */
-}
-
-.custom-dark-multi-select .dropdown-content .item {
-  background-color: #555;
-  color: #ddd; /* Light text color for items */
-}
-
-.custom-dark-multi-select .selected-item {
-  background-color: #555; /* Dark background for selected items */
-  color: #ddd; /* Light text color for selected items */
-}
-
-.custom-dark-multi-select .search input {
-  background-color: #444; /* Dark background for the search input */
-  color: #eee; /* Lighter text for visibility */
-  border: none; /* Remove any default border */
-}
-
-.custom-dark-multi-select .input {
-  background-color: #444; /* Dark background for the input */
-  color: #ddd; /* Ensuring all text is visible against the dark backgrounds */
-}
-
-.custom-dark-multi-select .dropdown-heading,
-.custom-dark-multi-select .dropdown-content {
-  border-bottom: 1px solid #444; /* Subtle borders for separation */
-  background-color: #333;
-  color: #ccc;
 }

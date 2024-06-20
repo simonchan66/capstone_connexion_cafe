@@ -45,32 +45,33 @@ const RestaurantFeedbackForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Perform validation
+    // Perform validation assisted with copilot
     let newErrors = {};
   
     if (formData.overallRating === 0) {
       newErrors.overallRating = "Please provide an overall rating.";
     }
-  
+    // Check if any specific ratings are empty
     const emptyRatings = ratingItems.filter(
       (item) => formData[`${item.toLowerCase()}Rating`] === 0
     );
+
     if (emptyRatings.length > 0) {
       newErrors.ratings = "Please rate all the specific items.";
     }
-  
+    // Check if serving time is empty
     if (formData.servingTime === "") {
       newErrors.servingTime = "Please select a serving time.";
     }
-  
+    // Check if favorite items are empty
     if (formData.favoriteItems.length === 0) {
       newErrors.favoriteItems = "Please select at least one favorite item.";
     }
-  
+    // Check if customer feedback is empty
     if (formData.customerFeedback.trim() === "") {
       newErrors.customerFeedback = "Please provide your feedback.";
     }
-  
+    // If there are errors, set the state and return
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
