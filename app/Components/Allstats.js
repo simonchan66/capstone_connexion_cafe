@@ -263,12 +263,12 @@ const Allstats = () => {
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-800 text-white">
-                  <th className="px-4 py-2">{"orderId"}</th>
-                  <th className="px-4 py-2">{"user"}</th>
-                  <th className="px-4 py-2">{"date"}</th>
-                  <th className="px-4 py-2">{"time"}</th>
-                  <th className="px-4 py-2">{"totalAmount"}</th>
-                  <th className="px-4 py-2">{"actions"}</th>
+                  <th className="px-4 py-2">{"Order Id"}</th>
+                  <th className="px-4 py-2">{"User"}</th>
+                  <th className="px-4 py-2">{"Date"}</th>
+                  <th className="px-4 py-2">{"Time"}</th>
+                  <th className="px-4 py-2">{"Total Amount"}</th>
+                  <th className="px-4 py-2">{"Actions"}</th>
                 </tr>
               </thead>
               <tbody>
