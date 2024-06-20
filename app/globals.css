@@ -30,6 +30,14 @@ body {
   padding: 0;
 }
 
+.containerdash {
+  display: flex;
+  height: 70vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .navigation {
   flex: 0 0 8%; /* Do not grow, do not shrink, base width is 10% */
   background-color: #222;

@@ -18,6 +18,12 @@ const Navigation = () => {
           <Link href="/Editproduct">Edit</Link>
         </li>
         <li>
+          <Link href="/Feedback">Customer</Link>
+        </li>
+        <li>
+          <Link href="/FeedbackDash">Dashboard</Link>
+        </li>
+        <li>
           <button>中文</button>
         </li>
       </ul>

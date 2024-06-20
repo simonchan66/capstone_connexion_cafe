@@ -42,29 +42,53 @@ const RestaurantFeedbackForm = () => {
   ];
   const db = getFirestore();
   const colRef = collection(db, "feedback");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Basic validation still applies here
-    if (Object.keys(errors).length > 0) {
+    // Perform validation assisted with copilot
+    let newErrors = {};
+  
+    if (formData.overallRating === 0) {
+      newErrors.overallRating = "Please provide an overall rating.";
+    }
+    // Check if any specific ratings are empty
+    const emptyRatings = ratingItems.filter(
+      (item) => formData[`${item.toLowerCase()}Rating`] === 0
+    );
+
+    if (emptyRatings.length > 0) {
+      newErrors.ratings = "Please rate all the specific items.";
+    }
+    // Check if serving time is empty
+    if (formData.servingTime === "") {
+      newErrors.servingTime = "Please select a serving time.";
+    }
+    // Check if favorite items are empty
+    if (formData.favoriteItems.length === 0) {
+      newErrors.favoriteItems = "Please select at least one favorite item.";
+    }
+    // Check if customer feedback is empty
+    if (formData.customerFeedback.trim() === "") {
+      newErrors.customerFeedback = "Please provide your feedback.";
+    }
+    // If there are errors, set the state and return
+    if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
   
     try {
-await addDoc(colRef, {
-  overallRating: formData.overallRating,
-  vibeRating: formData.vibeRating,
-  serviceRating: formData.serviceRating,
-  productRating: formData.productRating,
-  priceRating: formData.priceRating,
-  cleanlinessRating: formData.cleanlinessRating,
-  servingTime: formData.servingTime,
-  favoriteItems: formData.favoriteItems.map((item) => item.value),
-  customerFeedback: formData.customerFeedback,
-});
-
+      await addDoc(colRef, {
+        overallRating: formData.overallRating,
+        vibeRating: formData.vibeRating,
+        serviceRating: formData.serviceRating,
+        productRating: formData.productRating,
+        priceRating: formData.priceRating,
+        cleanlinessRating: formData.cleanlinessRating,
+        servingTime: formData.servingTime,
+        favoriteItems: formData.favoriteItems.map((item) => item.value),
+        customerFeedback: formData.customerFeedback,
+      });
   
       setSubmitted(true);
       setFormData({
@@ -90,16 +114,15 @@ await addDoc(colRef, {
       [`${item.toLowerCase()}Rating`]: newRating,
     }));
   };
-
   return (
-    <div className="container mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
+    <div className="container mx-auto mt-10 p-6 bg-gray-800 text-white rounded-md shadow-md">
       {submitted ? (
-        <div className="text-green-600">Thank you for your feedback!</div>
+        <div className="text-green-400">Thank you for your feedback!</div>
       ) : (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} >
           <label
             htmlFor="overallRating"
-            className="block text-gray-700 font-bold mb-2"
+            className="block text-gray-300 font-bold mb-2"
           >
             Overall Rating:
           </label>
@@ -108,20 +131,21 @@ await addDoc(colRef, {
             value={formData.overallRating}
             onChange={(newRating) => handleRatingChange("overall", newRating)}
             starCount={5}
-            emptyStarColor="#ddd"
+            emptyStarColor="#4B5563"
+            fullStarColor="#FCD34D"
           />
           {errors.overallRating && (
             <p className="text-red-500 text-sm">{errors.overallRating}</p>
           )}
 
           {/* Specific Ratings */}
-          <label className="block text-gray-700 font-bold mb-2">
+          <label className="block text-gray-300 font-bold mb-2">
             Rate the following:
           </label>
           <div className="space-y-2">
             {ratingItems.map((item) => (
               <div key={item} className="flex items-center">
-                <label htmlFor={item} className="w-24">
+                <label htmlFor={item} className="w-24 text-gray-300">
                   {item}:
                 </label>
                 <StarRating
@@ -129,7 +153,8 @@ await addDoc(colRef, {
                   value={formData[`${item.toLowerCase()}Rating`]}
                   onChange={(newRating) => handleRatingChange(item, newRating)}
                   starCount={5}
-                  emptyStarColor="#ddd"
+                  emptyStarColor="#4B5563"
+                  fullStarColor="#FCD34D"
                 />
               </div>
             ))}
@@ -141,13 +166,13 @@ await addDoc(colRef, {
           {/* Serving Time */}
           <label
             htmlFor="servingTime"
-            className="block text-gray-700 font-bold mb-2"
+            className="block text-gray-300 font-bold mb-2"
           >
             Serving Time:
           </label>
           <select
             id="servingTime"
-            className="w-full p-2 border rounded-md mb-4"
+            className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md mb-4"
             value={formData.servingTime}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, servingTime: e.target.value }))
@@ -165,29 +190,34 @@ await addDoc(colRef, {
           )}
 
           {/* Favourite Items */}
-          <label className="block text-gray-700 font-bold mb-2">
+          <label className="block text-gray-300 font-bold mb-2">
             Favourite Items (select all that apply):
           </label>
-          <MultiSelect
-            options={favouriteItemOptions}
-            value={formData.favoriteItems}
-            onChange={(selected) =>
-              setFormData((prev) => ({ ...prev, favoriteItems: selected }))
-            }
-            labelledBy="Select"
-            className="mb-4"
-          />
 
+          <MultiSelect
+  options={favouriteItemOptions}
+  value={formData.favoriteItems}
+  onChange={(selected) =>
+    setFormData((prev) => ({ ...prev, favoriteItems: selected }))
+  }
+  labelledBy="Select"
+  className="bg-gray-700 mb-4 text-black"
+  itemRenderer={(option) => (
+    <div className="bg-gray-700 p-2 rounded text-white">
+      {option.label}
+    </div>
+  )}
+/>
           {/* Customer Feedback */}
           <label
             htmlFor="customerFeedback"
-            className="block text-gray-700 font-bold mb-2"
+            className="block  text-gray-300 font-bold mb-2"
           >
             Customer Feedback:
           </label>
           <textarea
             id="customerFeedback"
-            className="w-full p-2 border rounded-md mb-4"
+            className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md mb-4"
             value={formData.customerFeedback}
             onChange={(e) =>
               setFormData((prev) => ({
@@ -200,7 +230,7 @@ await addDoc(colRef, {
           {/* Submit Button */}
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded mt-4 w-full sm:w-auto"
           >
             Submit Feedback
           </button>
