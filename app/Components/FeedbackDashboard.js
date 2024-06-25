@@ -1,10 +1,11 @@
 "use client"
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import ReactStars from "react-stars";
+
 // assisted by Copilot and Claude 3 Opus
 const FeedbackDashboard = () => {
   const [feedbackData, setFeedbackData] = useState([]);
@@ -70,6 +71,58 @@ const FeedbackDashboard = () => {
     );
     return filteredFeedbacks.slice(0, count);
   };
+
+  const calculateBrowserDistribution = () => {
+    const browserCounts = {};
+    feedbackData.forEach((feedback) => {
+      const browserInfo = feedback.browserInfo;
+      const browserName = getBrowserName(browserInfo);
+      browserCounts[browserName] = (browserCounts[browserName] || 0) + 1;
+    });
+
+    const totalCount = feedbackData.length;
+    const browserDistributionData = Object.entries(browserCounts).map(([browser, count]) => ({
+      browser,
+      count,
+      percentage: ((count / totalCount) * 100).toFixed(2),
+    }));
+
+    return browserDistributionData;
+  };
+
+  const getBrowserName = (browserInfo) => {
+    if (browserInfo.includes("Edg")) {
+      return "Edge";
+    } else if (browserInfo.includes("Chrome")) {
+      return "Chrome";
+    } else if (browserInfo.includes("Safari") && !browserInfo.includes("Chrome")) {
+      return "Safari";
+    } else if (browserInfo.includes("Firefox")) {
+      return "Firefox";
+    } else {
+      return "Other";
+    }
+  };
+
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
+
+  const RADIAN = Math.PI / 180;
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
+
+
+
+
   return (
     <div className="containerdash mx-auto mt-8 p-4">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
@@ -161,6 +214,32 @@ const FeedbackDashboard = () => {
             ))}
           </ul>
         </div>
+
+        
+        {/* Browser Distribution */}
+        <div className="bg-gray-700 p-4 rounded shadow col-span-2 md:col-span-1">
+          <h2 className="text-lg font-bold mb-2">Browser Distribution</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={calculateBrowserDistribution()}
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={70}
+                fill="#8884d8"
+                dataKey="count"
+              >
+                {calculateBrowserDistribution().map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend formatter={(value, entry, index) => entry.payload.browser} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+
       </div>
     </div>
   );
