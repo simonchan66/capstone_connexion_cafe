@@ -91,14 +91,14 @@ const FeedbackDashboard = () => {
   };
 
   const getBrowserName = (browserInfo) => {
-    if (browserInfo.includes("Chrome")) {
+    if (browserInfo.includes("Edg")) {
+      return "Edge";
+    } else if (browserInfo.includes("Chrome")) {
       return "Chrome";
     } else if (browserInfo.includes("Safari") && !browserInfo.includes("Chrome")) {
       return "Safari";
     } else if (browserInfo.includes("Firefox")) {
       return "Firefox";
-    } else if (browserInfo.includes("Edge")) {
-      return "Edge";
     } else {
       return "Other";
     }
@@ -107,7 +107,7 @@ const FeedbackDashboard = () => {
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
 
   const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
@@ -118,7 +118,6 @@ const FeedbackDashboard = () => {
       </text>
     );
   };
-
 
 
 
@@ -226,7 +225,7 @@ const FeedbackDashboard = () => {
                 data={calculateBrowserDistribution()}
                 labelLine={false}
                 label={renderCustomizedLabel}
-                outerRadius={100}
+                outerRadius={70}
                 fill="#8884d8"
                 dataKey="count"
               >
@@ -235,7 +234,7 @@ const FeedbackDashboard = () => {
                 ))}
               </Pie>
               <Tooltip />
-              <Legend />
+              <Legend formatter={(value, entry, index) => entry.payload.browser} />
             </PieChart>
           </ResponsiveContainer>
         </div>
