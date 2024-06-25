@@ -1,32 +1,48 @@
 "use client"
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import ReactStars from "react-stars";
+
 // assisted by Copilot and Claude 3 Opus
 const FeedbackDashboard = () => {
   const [feedbackData, setFeedbackData] = useState([]);
+  const [timeFilter, setTimeFilter] = useState('all'); // 'today', 'thisMonth', 'all'
 
-  // Fetch feedback data from Firestore
   useEffect(() => {
     const fetchFeedbackData = async () => {
       const db = getFirestore();
       const colRef = collection(db, "feedback");
       const snapshot = await getDocs(colRef);
-      const data = snapshot.docs.map((doc) => doc.data());
+      let data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  
+      if (timeFilter === 'today') {
+        data = data.filter(d => new Date(d.feedback_time).getTime() >= todayStart.getTime());
+      } else if (timeFilter === 'thisMonth') {
+        data = data.filter(d => new Date(d.feedback_time).getTime() >= monthStart.getTime());
+      }
+  
       setFeedbackData(data);
     };
-
+  
     fetchFeedbackData();
-  }, []);
+  }, [timeFilter]);
+
+
   // Calculate overall score
   const calculateOverallScore = () => {
     const totalScore = feedbackData.reduce((sum, feedback) => sum + feedback.overallRating, 0);
     const averageScore = totalScore / feedbackData.length;
     return Math.round((averageScore / 5) * 100);
   };
+
+
 
   const calculateCategoryPerformance = () => {
     const categories = ["Vibe", "Service", "Product", "Price", "Cleanliness"];
@@ -70,8 +86,88 @@ const FeedbackDashboard = () => {
     );
     return filteredFeedbacks.slice(0, count);
   };
+
+  const calculateBrowserDistribution = () => {
+    const browserCounts = {};
+    feedbackData.forEach((feedback) => {
+      const browserInfo = feedback.browserInfo;
+      const browserName = getBrowserName(browserInfo);
+      browserCounts[browserName] = (browserCounts[browserName] || 0) + 1;
+    });
+
+    const totalCount = feedbackData.length;
+    const browserDistributionData = Object.entries(browserCounts).map(([browser, count]) => ({
+      browser,
+      count,
+      percentage: ((count / totalCount) * 100).toFixed(2),
+    }));
+
+    return browserDistributionData;
+  };
+
+  const getBrowserName = (browserInfo) => {
+    if (browserInfo.includes("Edg")) {
+      return "Edge";
+    } else if (browserInfo.includes("Chrome")) {
+      return "Chrome";
+    } else if (browserInfo.includes("Safari") && !browserInfo.includes("Chrome")) {
+      return "Safari";
+    } else if (browserInfo.includes("Firefox")) {
+      return "Firefox";
+    } else {
+      return "Other";
+    }
+  };
+
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
+
+  const RADIAN = Math.PI / 180;
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text x={x} y={y} fill="white" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
+        {`${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
+
+
+
+
   return (
-    <div className="containerdash mx-auto mt-8 p-4">
+    <div>
+
+      <div className="items-center justify-between mb-4">
+        <h1 className="text-xl font-bold">Feedback Dashboard
+        <button
+            className={`text-sm mr-2 p-2 ml-6 ${timeFilter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            onClick={() => setTimeFilter('all')}
+          >
+            All Time
+          </button>
+          <button
+            className={`text-sm mr-2 p-2 ${timeFilter === 'today' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            onClick={() => setTimeFilter('today')}
+          >
+            Today
+          </button>
+          <button
+            className={`text-sm p-2 ${timeFilter === 'thisMonth' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            onClick={() => setTimeFilter('thisMonth')}
+          >
+            This Month
+          </button>
+        </h1>
+
+
+          <div>
+        </div>
+      </div>
+      <div className="containerdash mx-auto mt-8 p-4">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         {/* Overall Score */}
         <div className="bg-gray-700 p-4 rounded shadow">
@@ -144,7 +240,7 @@ const FeedbackDashboard = () => {
           <ul className="list-disc list-inside">
             {getRecentFeedbacks(3, "positive").map((feedback, index) => (
               <li key={index} className="text-sm mb-1">
-                {feedback.customerFeedback}
+              👍{feedback.customerFeedback}
               </li>
             ))}
           </ul>
@@ -156,13 +252,40 @@ const FeedbackDashboard = () => {
           <ul className="list-disc list-inside">
             {getRecentFeedbacks(3, "negative").map((feedback, index) => (
               <li key={index} className="text-sm mb-1">
-                {feedback.customerFeedback}
+              👎{feedback.customerFeedback}
               </li>
             ))}
           </ul>
         </div>
+
+        
+        {/* Browser Distribution */}
+        <div className="bg-gray-700 p-4 rounded shadow col-span-2 md:col-span-1">
+          <h2 className="text-lg font-bold mb-2">Browser Distribution</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={calculateBrowserDistribution()}
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={70}
+                fill="#8884d8"
+                dataKey="count"
+              >
+                {calculateBrowserDistribution().map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend formatter={(value, entry, index) => entry.payload.browser} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+
       </div>
     </div>
+</div>
   );
 };
 
