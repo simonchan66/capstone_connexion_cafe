@@ -197,7 +197,7 @@ const FeedbackDashboard = () => {
           <ul className="list-disc list-inside">
             {getRecentFeedbacks(3, "positive").map((feedback, index) => (
               <li key={index} className="text-sm mb-1">
-                {feedback.customerFeedback}
+              👍{feedback.customerFeedback}
               </li>
             ))}
           </ul>
@@ -209,7 +209,7 @@ const FeedbackDashboard = () => {
           <ul className="list-disc list-inside">
             {getRecentFeedbacks(3, "negative").map((feedback, index) => (
               <li key={index} className="text-sm mb-1">
-                {feedback.customerFeedback}
+              👎{feedback.customerFeedback}
               </li>
             ))}
           </ul>
