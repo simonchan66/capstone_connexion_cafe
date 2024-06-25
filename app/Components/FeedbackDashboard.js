@@ -208,18 +208,18 @@ const FeedbackDashboard = () => {
         </div>
 
         {/* Serving Time Distribution */}
-        <div className="bg-gray-700 p-4 rounded shadow col-span-2 md:col-span-1">
-          <h2 className="text-lg font-bold mb-2">Serving Time Distribution</h2>
+        <div className="bg-gray-700 p-4 rounded shadow col-span-2 md:col-span-1 text-xs">
+          <h2 className="text-lg font-bold mb-2 ">Serving Time Distribution</h2>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={calculateServingTimeDistribution()}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="range" />
-              <YAxis />
+              <XAxis dataKey="range" tick={{ fill: 'white' }}/>
+              <YAxis  tick={{ fill: 'white' }}/>
               <Tooltip />
               <Legend />
               <Bar dataKey="count" fill="#8884d8" />
             </BarChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer>  
         </div>
 
         {/* Top Favorite Items */}
