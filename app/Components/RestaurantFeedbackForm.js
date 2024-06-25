@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StarRating from "react-rating-stars-component";
 import { MultiSelect } from "react-multi-select-component";
 import {
@@ -24,6 +24,13 @@ const RestaurantFeedbackForm = () => {
     favoriteItems: [],
     customerFeedback: "",
   });
+
+  const [browserInfo, setBrowserInfo] = useState("");
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent;
+    setBrowserInfo(userAgent);
+  }, []);
 
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
@@ -92,6 +99,7 @@ const RestaurantFeedbackForm = () => {
         favoriteItems: formData.favoriteItems.map((item) => item.value),
         customerFeedback: formData.customerFeedback,
         feedback_time: feedback_id,
+        browserInfo: browserInfo, // Add browser information to the feedback data
       });
   
       setSubmitted(true);
