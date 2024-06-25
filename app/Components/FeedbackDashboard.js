@@ -9,25 +9,40 @@ import ReactStars from "react-stars";
 // assisted by Copilot and Claude 3 Opus
 const FeedbackDashboard = () => {
   const [feedbackData, setFeedbackData] = useState([]);
+  const [timeFilter, setTimeFilter] = useState('all'); // 'today', 'thisMonth', 'all'
 
-  // Fetch feedback data from Firestore
   useEffect(() => {
     const fetchFeedbackData = async () => {
       const db = getFirestore();
       const colRef = collection(db, "feedback");
       const snapshot = await getDocs(colRef);
-      const data = snapshot.docs.map((doc) => doc.data());
+      let data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  
+      if (timeFilter === 'today') {
+        data = data.filter(d => new Date(d.feedback_time).getTime() >= todayStart.getTime());
+      } else if (timeFilter === 'thisMonth') {
+        data = data.filter(d => new Date(d.feedback_time).getTime() >= monthStart.getTime());
+      }
+  
       setFeedbackData(data);
     };
-
+  
     fetchFeedbackData();
-  }, []);
+  }, [timeFilter]);
+
+
   // Calculate overall score
   const calculateOverallScore = () => {
     const totalScore = feedbackData.reduce((sum, feedback) => sum + feedback.overallRating, 0);
     const averageScore = totalScore / feedbackData.length;
     return Math.round((averageScore / 5) * 100);
   };
+
+
 
   const calculateCategoryPerformance = () => {
     const categories = ["Vibe", "Service", "Product", "Price", "Cleanliness"];
@@ -124,7 +139,35 @@ const FeedbackDashboard = () => {
 
 
   return (
-    <div className="containerdash mx-auto mt-8 p-4">
+    <div>
+
+      <div className="items-center justify-between mb-4">
+        <h1 className="text-xl font-bold">Feedback Dashboard
+        <button
+            className={`text-sm mr-2 p-2 ml-6 ${timeFilter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            onClick={() => setTimeFilter('all')}
+          >
+            All Time
+          </button>
+          <button
+            className={`text-sm mr-2 p-2 ${timeFilter === 'today' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            onClick={() => setTimeFilter('today')}
+          >
+            Today
+          </button>
+          <button
+            className={`text-sm p-2 ${timeFilter === 'thisMonth' ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            onClick={() => setTimeFilter('thisMonth')}
+          >
+            This Month
+          </button>
+        </h1>
+
+
+          <div>
+        </div>
+      </div>
+      <div className="containerdash mx-auto mt-8 p-4">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         {/* Overall Score */}
         <div className="bg-gray-700 p-4 rounded shadow">
@@ -197,7 +240,7 @@ const FeedbackDashboard = () => {
           <ul className="list-disc list-inside">
             {getRecentFeedbacks(3, "positive").map((feedback, index) => (
               <li key={index} className="text-sm mb-1">
-                {feedback.customerFeedback}
+              👍{feedback.customerFeedback}
               </li>
             ))}
           </ul>
@@ -209,7 +252,7 @@ const FeedbackDashboard = () => {
           <ul className="list-disc list-inside">
             {getRecentFeedbacks(3, "negative").map((feedback, index) => (
               <li key={index} className="text-sm mb-1">
-                {feedback.customerFeedback}
+              👎{feedback.customerFeedback}
               </li>
             ))}
           </ul>
@@ -242,6 +285,7 @@ const FeedbackDashboard = () => {
 
       </div>
     </div>
+</div>
   );
 };
 
