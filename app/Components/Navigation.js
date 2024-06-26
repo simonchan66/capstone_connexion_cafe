@@ -24,6 +24,9 @@ const Navigation = () => {
           <Link href="/FeedbackDash">Dashboard</Link>
         </li>
         <li>
+          <Link href="/KitchenPage">Kitchen</Link>
+        </li>
+        <li>
           <button>中文</button>
         </li>
       </ul>
