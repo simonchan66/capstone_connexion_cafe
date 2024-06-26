@@ -11,18 +11,22 @@ function KitchenOutput() {
             const audio = new Audio(`/audio/0${i}.mp3`);
             audioFiles.current[i] = audio;
         }
+        // Preload the 'pickup_eng.mp3'
+        const pickupAudio = new Audio('/audio/pickup_eng.mp3');
+        audioFiles.current['pickup'] = pickupAudio;  // Store it with a key for easy access
     }, []);
 
     useEffect(() => {
         const playNextAudio = () => {
             if (audioQueue.current.length > 0) {
-                const audio = audioFiles.current[audioQueue.current.shift()];
+                const audioKey = audioQueue.current.shift();  // This could now be a digit or 'pickup'
+                const audio = audioFiles.current[audioKey];
                 audio.play();
                 audio.onended = playNextAudio;
             }
         };
 
-        if (audioQueue.current.length === 3) { // Start playing when all three are queued
+        if (audioQueue.current.length === 4) { // Start playing when all four are queued (including 'pickup')
             playNextAudio();
         }
     }, [number]); // Triggered when number changes
@@ -31,6 +35,7 @@ function KitchenOutput() {
         const newNumber = Math.floor(100 + Math.random() * 900).toString();  // Generates a number between 100 and 999
         setNumber(newNumber);
         audioQueue.current = newNumber.split('').map(digit => parseInt(digit));
+        audioQueue.current.push('pickup');  // Add 'pickup' to the queue after the numbers
     };
 
     return (
