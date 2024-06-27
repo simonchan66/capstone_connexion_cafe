@@ -252,7 +252,10 @@ const RestaurantFeedbackForm = () => {
           <label className="block text-gray-300 font-bold mb-2" htmlFor="mood">
             Choose an emoji that best represents your experience:
           </label>
-          <div className="flex space-x-4 mb-4" id="mood">
+          <div
+            className="flex flex-wrap justify-center items-center space-x-4 mb-4"
+            id="mood"
+          >
             {moodOptions.map((emoji, index) => (
               <button
                 key={emoji}
@@ -264,7 +267,13 @@ const RestaurantFeedbackForm = () => {
                 }}
                 onClick={() => setSelectedEmoji(emoji)}
                 aria-label={`Mood: ${emoji}`}
-                className={`text-4xl p-2 rounded-full transition duration-300
+                className={`text-2xl p-2 rounded-full transition duration-300
+        ${
+          selectedEmoji === emoji
+            ? "bg-blue-500 text-white"
+            : "bg-gray-700 hover:bg-gray-600"
+        }
+        md:mb-0 mb-2
               ${
                 selectedEmoji === emoji
                   ? "bg-blue-500 text-white"
