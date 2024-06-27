@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import StarRating from "react-rating-stars-component";
 import { MultiSelect } from "react-multi-select-component";
 import {
@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 
 const RestaurantFeedbackForm = () => {
+  const moodOptions = ["😍", "😆", "😊", "😑", "☹️", "😠", "🤮"];
   const [formData, setFormData] = useState({
     overallRating: 0,
     vibeRating: 0,
@@ -26,14 +27,22 @@ const RestaurantFeedbackForm = () => {
   });
 
   const [browserInfo, setBrowserInfo] = useState("");
+  const emojiButtonsRef = useRef([]);
+  const [selectedEmoji, setSelectedEmoji] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const userAgent = navigator.userAgent;
     setBrowserInfo(userAgent);
-  }, []);
 
-  const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState({});
+    if (emojiButtonsRef.current && emojiButtonsRef.current.length > 0) {
+      emojiButtonsRef.current.forEach((button) => {
+        if (button && button.ariaLabel === `Mood: ${selectedEmoji}`) {
+        }
+      });
+    }
+  }, [selectedEmoji]);
 
   const ratingItems = ["Vibe", "Service", "Product", "Price", "Cleanliness"];
 
@@ -51,11 +60,11 @@ const RestaurantFeedbackForm = () => {
   const colRef = collection(db, "feedback");
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const feedback_time = new Date().getTime(); // Store the timestamp
     // Perform validation assisted with copilot
     let newErrors = {};
-  
+
     if (formData.overallRating === 0) {
       newErrors.overallRating = "Please provide an overall rating.";
     }
@@ -75,16 +84,18 @@ const RestaurantFeedbackForm = () => {
     if (formData.favoriteItems.length === 0) {
       newErrors.favoriteItems = "Please select at least one favorite item.";
     }
-    // Check if customer feedback is empty
-    if (formData.customerFeedback.trim() === "") {
-      newErrors.customerFeedback = "Please provide your feedback.";
+
+    // Check if a mood emoji is selected
+    if (!selectedEmoji) {
+      newErrors.mood = "Please select a mood emoji.";
     }
+
     // If there are errors, set the state and return
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-  
+
     try {
       await addDoc(colRef, {
         overallRating: formData.overallRating,
@@ -98,8 +109,9 @@ const RestaurantFeedbackForm = () => {
         customerFeedback: formData.customerFeedback,
         feedback_time: feedback_time, // Store the timestamp instead of the formatted string
         browserInfo: browserInfo, // Add browser information to the feedback data
+        mood: selectedEmoji,
       });
-  
+
       setSubmitted(true);
       setFormData({
         overallRating: 0,
@@ -129,7 +141,7 @@ const RestaurantFeedbackForm = () => {
       {submitted ? (
         <div className="text-green-400">Thank you for your feedback!</div>
       ) : (
-        <form onSubmit={handleSubmit} >
+        <form onSubmit={handleSubmit}>
           <label
             htmlFor="overallRating"
             className="block text-gray-300 font-bold mb-2"
@@ -189,11 +201,11 @@ const RestaurantFeedbackForm = () => {
             }
           >
             <option value="">Select</option>
-              <option value="0-5">0-5 mins</option>
-              <option value="5-10">5-10 mins</option>
-              <option value="10-15">10-15 mins</option>
-              <option value="15-30">15-30 mins</option>
-              <option value="30+">More than 30 mins</option>
+            <option value="0-5">0-5 mins</option>
+            <option value="5-10">5-10 mins</option>
+            <option value="10-15">10-15 mins</option>
+            <option value="15-30">15-30 mins</option>
+            <option value="30+">More than 30 mins</option>
           </select>
           {errors.servingTime && (
             <p className="text-red-500 text-sm">{errors.servingTime}</p>
@@ -205,19 +217,19 @@ const RestaurantFeedbackForm = () => {
           </label>
 
           <MultiSelect
-  options={favouriteItemOptions}
-  value={formData.favoriteItems}
-  onChange={(selected) =>
-    setFormData((prev) => ({ ...prev, favoriteItems: selected }))
-  }
-  labelledBy="Select"
-  className="bg-gray-700 mb-4 text-black"
-  itemRenderer={(option) => (
-    <div className="bg-gray-700 p-2 rounded text-white">
-      {option.label}
-    </div>
-  )}
-/>
+            options={favouriteItemOptions}
+            value={formData.favoriteItems}
+            onChange={(selected) =>
+              setFormData((prev) => ({ ...prev, favoriteItems: selected }))
+            }
+            labelledBy="Select"
+            className="bg-gray-700 mb-4 text-black"
+            itemRenderer={(option) => (
+              <div className="bg-gray-700 p-2 rounded text-white">
+                {option.label}
+              </div>
+            )}
+          />
           {/* Customer Feedback */}
           <label
             htmlFor="customerFeedback"
@@ -236,6 +248,34 @@ const RestaurantFeedbackForm = () => {
               }))
             }
           />
+          {/* Mood Selection */}
+          <label className="block text-gray-300 font-bold mb-2" htmlFor="mood">
+            Choose an emoji that best represents your experience:
+          </label>
+          <div className="flex space-x-4 mb-4" id="mood">
+            {moodOptions.map((emoji, index) => (
+              <button
+                key={emoji}
+                type="button"
+                ref={(el) => {
+                  if (el) {
+                    emojiButtonsRef.current.push(el);
+                  }
+                }}
+                onClick={() => setSelectedEmoji(emoji)}
+                aria-label={`Mood: ${emoji}`}
+                className={`text-4xl p-2 rounded-full transition duration-300
+              ${
+                selectedEmoji === emoji
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-700 hover:bg-gray-600"
+              }`}
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+          {errors.mood && <p className="text-red-500 text-sm">{errors.mood}</p>}
 
           {/* Submit Button */}
           <button
