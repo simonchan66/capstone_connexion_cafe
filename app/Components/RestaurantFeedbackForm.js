@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 
 const RestaurantFeedbackForm = () => {
-  const moodOptions = ["😍", "😆", "😊", "😑", "☹️", "😠", "🤮"];
+  const moodOptions = ["😍", "😆", "😊", "☹️", "🤮"];
   const [formData, setFormData] = useState({
     overallRating: 0,
     vibeRating: 0,
