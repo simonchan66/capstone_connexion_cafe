@@ -161,7 +161,7 @@ const RestaurantFeedbackForm = () => {
           )}
 
           {/* Specific Ratings */}
-          <label className="block text-gray-300 font-bold mb-2">
+          <label className="block text-gray-300 font-bold mb-2 mt-2">
             Rate the following:
           </label>
           <div className="space-y-2">
@@ -188,13 +188,13 @@ const RestaurantFeedbackForm = () => {
           {/* Serving Time */}
           <label
             htmlFor="servingTime"
-            className="block text-gray-300 font-bold mb-2"
+            className="block text-gray-300 font-bold mb-2 mt-2"
           >
             Serving Time:
           </label>
           <select
             id="servingTime"
-            className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md mb-4"
+            className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md mb-4 mt-2"
             value={formData.servingTime}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, servingTime: e.target.value }))
@@ -212,7 +212,7 @@ const RestaurantFeedbackForm = () => {
           )}
 
           {/* Favourite Items */}
-          <label className="block text-gray-300 font-bold mb-2">
+          <label className="block text-gray-300 font-bold mb-2 mt-2">
             Favourite Items (select all that apply):
           </label>
 
@@ -233,7 +233,7 @@ const RestaurantFeedbackForm = () => {
           {/* Customer Feedback */}
           <label
             htmlFor="customerFeedback"
-            className="block  text-gray-300 font-bold mb-2"
+            className="block  text-gray-300 font-bold mb-2 mt-2"
           >
             Customer Feedback:
           </label>
