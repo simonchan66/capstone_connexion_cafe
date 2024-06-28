@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 
 const RestaurantFeedbackForm = () => {
-  const moodOptions = ["😍", "😆", "😊", "😑", "☹️", "😠", "🤮"];
+  const moodOptions = ["😍", "😊", "😑", "☹️", "🤮"];
   const [formData, setFormData] = useState({
     overallRating: 0,
     vibeRating: 0,
@@ -267,7 +267,7 @@ const RestaurantFeedbackForm = () => {
                 }}
                 onClick={() => setSelectedEmoji(emoji)}
                 aria-label={`Mood: ${emoji}`}
-                className={`text-2xl p-2 rounded-full transition duration-300
+                className={`text-4xl p-2 rounded-full transition duration-300
         ${
           selectedEmoji === emoji
             ? "bg-blue-500 text-white"
