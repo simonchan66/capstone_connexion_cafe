@@ -2,12 +2,30 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useUserAuth } from "./_utils/auth-context";
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const { user, gitHubSignIn, firebaseSignOut, signInWithEmailAndPassword } = useUserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
+
+async function handleNFCLogin() {
+  try {
+    const response = await fetch('http://127.0.0.1:5000/api/nfc_login');
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log('NFC login successful. UID:', data.uid);
+      router.push('/Home'); // Redirect to home page
+    } else {
+      console.error('NFC login failed:', data.error);
+    }
+  } catch (error) {
+    console.error('NFC login error:', error);
+  }
+}
 
   function handleSignIn() {
     gitHubSignIn()
@@ -89,12 +107,12 @@ export default function Page() {
       >
         Sign In with GitHub
       </button>
-      <Link 
-        href="/Admin"
-        className="block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-full w-full text-center transition duration-300 ease-in-out"
-      >
-        Admin Mode
-      </Link>
+      <button
+        onClick={handleNFCLogin}
+        className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out">
+
+        NFC TAP TAP
+      </button>
     </div>
   </>
           
