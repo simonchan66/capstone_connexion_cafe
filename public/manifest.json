@@ -1,0 +1,9 @@
+{
+    "name": "Cafe POS App",
+    "short_name": "Cafe POS",
+    "start_url": ".",
+    "display": "standalone",
+    "permissions": [
+      "nfc"
+    ]
+  }

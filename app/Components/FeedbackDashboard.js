@@ -185,6 +185,7 @@ const FeedbackDashboard = () => {
   return (
     <div>
       <div className="items-center justify-between mb-4">
+
         <h1 className="text-xl font-bold">
           Feedback Dashboard
           <button
@@ -192,24 +193,30 @@ const FeedbackDashboard = () => {
               timeFilter === "all" ? "bg-blue-500 text-white" : "bg-gray-600"
             }`}
             onClick={() => setTimeFilter("all")}
+
           >
             All Time
           </button>
           <button
+
             className={`text-sm mr-2 p-2 ${
               timeFilter === "today" ? "bg-blue-500 text-white" : "bg-gray-600"
             }`}
             onClick={() => setTimeFilter("today")}
+
           >
             Today
           </button>
           <button
+
+
             className={`text-sm p-2 ${
               timeFilter === "thisMonth"
                 ? "bg-blue-500 text-white"
                 : "bg-gray-600"
             }`}
             onClick={() => setTimeFilter("thisMonth")}
+
           >
             This Month
           </button>
