@@ -13,7 +13,9 @@ import {
 } from "firebase/firestore";
 
 const RestaurantFeedbackForm = () => {
-  const moodOptions = ["😍", "😆", "😊", "☹️", "🤮"];
+
+  const moodOptions = ["😍", "😊", "😑", "☹️", "🤮"];
+
   const [formData, setFormData] = useState({
     overallRating: 0,
     vibeRating: 0,
@@ -161,7 +163,7 @@ const RestaurantFeedbackForm = () => {
           )}
 
           {/* Specific Ratings */}
-          <label className="block text-gray-300 font-bold mb-2">
+          <label className="block text-gray-300 font-bold mb-2 mt-2">
             Rate the following:
           </label>
           <div className="space-y-2">
@@ -188,13 +190,13 @@ const RestaurantFeedbackForm = () => {
           {/* Serving Time */}
           <label
             htmlFor="servingTime"
-            className="block text-gray-300 font-bold mb-2"
+            className="block text-gray-300 font-bold mb-2 mt-2"
           >
             Serving Time:
           </label>
           <select
             id="servingTime"
-            className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md mb-4"
+            className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md mb-4 mt-2"
             value={formData.servingTime}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, servingTime: e.target.value }))
@@ -212,7 +214,7 @@ const RestaurantFeedbackForm = () => {
           )}
 
           {/* Favourite Items */}
-          <label className="block text-gray-300 font-bold mb-2">
+          <label className="block text-gray-300 font-bold mb-2 mt-2">
             Favourite Items (select all that apply):
           </label>
 
@@ -233,7 +235,7 @@ const RestaurantFeedbackForm = () => {
           {/* Customer Feedback */}
           <label
             htmlFor="customerFeedback"
-            className="block  text-gray-300 font-bold mb-2"
+            className="block  text-gray-300 font-bold mb-2 mt-2"
           >
             Customer Feedback:
           </label>
@@ -252,7 +254,10 @@ const RestaurantFeedbackForm = () => {
           <label className="block text-gray-300 font-bold mb-2" htmlFor="mood">
             Choose an emoji that best represents your experience:
           </label>
-          <div className="flex space-x-4 mb-4" id="mood">
+          <div
+            className="flex flex-wrap justify-center items-center space-x-4 mb-4"
+            id="mood"
+          >
             {moodOptions.map((emoji, index) => (
               <button
                 key={emoji}
@@ -265,6 +270,12 @@ const RestaurantFeedbackForm = () => {
                 onClick={() => setSelectedEmoji(emoji)}
                 aria-label={`Mood: ${emoji}`}
                 className={`text-4xl p-2 rounded-full transition duration-300
+        ${
+          selectedEmoji === emoji
+            ? "bg-blue-500 text-white"
+            : "bg-gray-700 hover:bg-gray-600"
+        }
+        md:mb-0 mb-2
               ${
                 selectedEmoji === emoji
                   ? "bg-blue-500 text-white"
