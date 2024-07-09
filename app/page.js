@@ -137,7 +137,7 @@ async function handleNFCLogin() {
       </button>
       <button
         onClick={handleNFCLogin}
-        className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out">
+        className="bg-orange-600 hover:bg-orange-400 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out">
 
         NFC TAP TAP
       </button>
