@@ -17,7 +17,7 @@ const OrderPage = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [orderItems, setOrderItems] = useState([]);
 
-  //const { t } = useLanguage();
+  const { t } = useLanguage();
 
   // it's used for updating the current date every second
   useEffect(() => {
