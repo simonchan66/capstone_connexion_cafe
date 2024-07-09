@@ -223,8 +223,7 @@ const OrderPage = () => {
   return (
     <div className="order-page">
       <header className="page-header">
-        <h1 className="page-heading-1">Connexion Cafe</h1>
-        <p>{t("test")}</p>
+        <h1 className="page-heading-1">{t("cafe")}</h1>
         <p>{currentDate.toLocaleString()}</p>
       </header>
 
