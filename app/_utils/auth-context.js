@@ -6,6 +6,7 @@ import {
   signOut,
   onAuthStateChanged,
   GithubAuthProvider,
+  signInWithEmailAndPassword as firebaseSignInWithEmailAndPassword, 
 } from "firebase/auth";
 import { auth } from "./firebase";
  
@@ -22,7 +23,11 @@ export const AuthContextProvider = ({ children }) => {
   const firebaseSignOut = () => {
     return signOut(auth);
   };
- 
+
+  const signInWithEmailAndPassword = (email, password) => {
+    return firebaseSignInWithEmailAndPassword(auth, email, password);
+  };
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -31,7 +36,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [user]);
  
   return (
-    <AuthContext.Provider value={{ user, gitHubSignIn, firebaseSignOut }}>
+    <AuthContext.Provider value={{ user, gitHubSignIn, firebaseSignOut, signInWithEmailAndPassword }}>
       {children}
     </AuthContext.Provider>
   );

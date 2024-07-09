@@ -16,22 +16,26 @@ export default function Page() {
   // const { lang, setLang, t } = useLanguage();
 
   async function handleNFCLogin() {
-    setLoading(true); // Set loading to true to show the loading modal
-    try {
-      const response = await fetch("http://127.0.0.1:5000/api/nfc_login");
-      const data = await response.json();
 
+    setLoading(true);
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/nfc_login');
+      const data = await response.json();
+  
       if (response.ok) {
-        console.log("NFC login successful. UID:", data.uid);
-        console.log(data);
-        router.push("/Home"); // Redirect to home page
+        console.log('NFC login successful. UID:', data.uid, 'Username:', data.username, 'Role:', data.role);
+        if (data.role === 'admin') {
+          router.push('/AdminPage');
+        } else {
+          router.push('/Home');
+        }
       } else {
-        console.error("NFC login failed:", data.error);
+        console.error('NFC login failed:', data.error);
       }
     } catch (error) {
-      console.error("NFC login error:", error);
+      console.error('NFC login error:', error);
     }
-    setLoading(false); // Set loading to false to hide the loading modal
+    setLoading(false);
   }
 
   function handleSignIn() {
@@ -136,27 +140,28 @@ export default function Page() {
                 />
               </div>
               <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
-              >
-                Sign In
-              </button>
-            </form>
-            <div className="space-y-4">
-              <button
-                onClick={handleSignIn}
-                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
-              >
-                Sign In with GitHub
-              </button>
-              <button
-                onClick={handleNFCLogin}
-                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
-              >
-                NFC TAP TAP
-              </button>
-            </div>
-          </>
+
+        type="submit"
+        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+      >
+        Sign In
+      </button>
+    </form>
+    <div className="space-y-4">
+      <button
+        onClick={handleSignIn}
+        className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+      >
+        Sign In with GitHub
+      </button>
+      <button
+        onClick={handleNFCLogin}
+        className="bg-orange-600 hover:bg-orange-400 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out">
+
+        NFC TAP TAP
+      </button>
+    </div>
+  </>
         )}
         {user && (
           <>
