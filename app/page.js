@@ -12,24 +12,27 @@ export default function Page() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-async function handleNFCLogin() {
-  setLoading(true); // Set loading to true to show the loading modal
-  try {
-    const response = await fetch('http://127.0.0.1:5000/api/nfc_login');
-    const data = await response.json();
-
-    if (response.ok) {
-      console.log('NFC login successful. UID:', data.uid);
-      console.log(data)
-      router.push('/Home'); // Redirect to home page
-    } else {
-      console.error('NFC login failed:', data.error);
+  async function handleNFCLogin() {
+    setLoading(true);
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/nfc_login');
+      const data = await response.json();
+  
+      if (response.ok) {
+        console.log('NFC login successful. UID:', data.uid, 'Username:', data.username, 'Role:', data.role);
+        if (data.role === 'admin') {
+          router.push('/AdminPage');
+        } else {
+          router.push('/Home');
+        }
+      } else {
+        console.error('NFC login failed:', data.error);
+      }
+    } catch (error) {
+      console.error('NFC login error:', error);
     }
-  } catch (error) {
-    console.error('NFC login error:', error);
+    setLoading(false);
   }
-  setLoading(false); // Set loading to false to hide the loading modal
-}
 
   function handleSignIn() {
     gitHubSignIn()
