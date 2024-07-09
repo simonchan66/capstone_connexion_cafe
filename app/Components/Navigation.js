@@ -4,13 +4,6 @@ import { useLanguage } from "../_utils/LanguageContext";
 
 const Navigation = () => {
   const { lang, setLang, t } = useLanguage();
-
-  const handleLanguageChange = () => {
-    const newLang = lang === "en" ? "zh" : "en";
-    setLang(newLang);
-    document.cookie = `language=${newLang}; path=/`;
-  };
-
   return (
     <nav>
       <ul>

@@ -2,34 +2,37 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useUserAuth } from "./_utils/auth-context";
-import { useRouter } from 'next/navigation';
-import { Oval } from 'react-loader-spinner';
+import { useRouter } from "next/navigation";
+import { Oval } from "react-loader-spinner";
+import { useLanguage } from "./_utils/LanguageContext";
 
 export default function Page() {
-  const { user, gitHubSignIn, firebaseSignOut, signInWithEmailAndPassword } = useUserAuth();
+  const { user, gitHubSignIn, firebaseSignOut, signInWithEmailAndPassword } =
+    useUserAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  // const { lang, setLang, t } = useLanguage();
 
-async function handleNFCLogin() {
-  setLoading(true); // Set loading to true to show the loading modal
-  try {
-    const response = await fetch('http://127.0.0.1:5000/api/nfc_login');
-    const data = await response.json();
+  async function handleNFCLogin() {
+    setLoading(true); // Set loading to true to show the loading modal
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/nfc_login");
+      const data = await response.json();
 
-    if (response.ok) {
-      console.log('NFC login successful. UID:', data.uid);
-      console.log(data)
-      router.push('/Home'); // Redirect to home page
-    } else {
-      console.error('NFC login failed:', data.error);
+      if (response.ok) {
+        console.log("NFC login successful. UID:", data.uid);
+        console.log(data);
+        router.push("/Home"); // Redirect to home page
+      } else {
+        console.error("NFC login failed:", data.error);
+      }
+    } catch (error) {
+      console.error("NFC login error:", error);
     }
-  } catch (error) {
-    console.error('NFC login error:', error);
+    setLoading(false); // Set loading to false to hide the loading modal
   }
-  setLoading(false); // Set loading to false to hide the loading modal
-}
 
   function handleSignIn() {
     gitHubSignIn()
@@ -62,10 +65,15 @@ async function handleNFCLogin() {
       });
   }
 
+  function handleLanguageChange() {
+    const newLang = lang === "en" ? "zh" : "en";
+    setLang(newLang);
+    document.cookie = `language=${newLang}; path=/`;
+  }
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gray-900 p-4">
       <div className="bg-gray-800 shadow-md rounded-lg p-8 max-w-md w-full">
-
         {/* Loading Modal */}
         {loading && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -77,17 +85,17 @@ async function handleNFCLogin() {
                 wrapperStyle={{}}
                 wrapperClass=""
                 visible={true}
-                ariaLabel='oval-loading'
+                ariaLabel="oval-loading"
                 secondaryColor="#00a2fa"
                 strokeWidth={2}
                 strokeWidthSecondary={2}
               />
-              <h2 className="text-2xl font-semibold mt-4">Waiting for NFC...</h2>
+              <h2 className="text-2xl font-semibold mt-4">
+                Waiting for NFC...
+              </h2>
             </div>
           </div>
         )}
-
-
 
         <h1 className="text-2xl font-bold text-center text-white mb-8">
           Welcome to Connexion Cafe POS
@@ -96,7 +104,10 @@ async function handleNFCLogin() {
           <>
             <form onSubmit={handleEmailSignIn} className="mb-3">
               <div className="mb-3">
-                <label htmlFor="email" className="block text-white font-semibold">
+                <label
+                  htmlFor="email"
+                  className="block text-white font-semibold"
+                >
                   Email
                 </label>
                 <input
@@ -109,7 +120,10 @@ async function handleNFCLogin() {
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="password" className="block text-white font-semibold ">
+                <label
+                  htmlFor="password"
+                  className="block text-white font-semibold "
+                >
                   Password
                 </label>
                 <input
@@ -122,28 +136,27 @@ async function handleNFCLogin() {
                 />
               </div>
               <button
-        type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
-      >
-        Sign In
-      </button>
-    </form>
-    <div className="space-y-4">
-      <button
-        onClick={handleSignIn}
-        className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
-      >
-        Sign In with GitHub
-      </button>
-      <button
-        onClick={handleNFCLogin}
-        className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out">
-
-        NFC TAP TAP
-      </button>
-    </div>
-  </>
-          
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+              >
+                Sign In
+              </button>
+            </form>
+            <div className="space-y-4">
+              <button
+                onClick={handleSignIn}
+                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+              >
+                Sign In with GitHub
+              </button>
+              <button
+                onClick={handleNFCLogin}
+                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+              >
+                NFC TAP TAP
+              </button>
+            </div>
+          </>
         )}
         {user && (
           <>
@@ -167,9 +180,7 @@ async function handleNFCLogin() {
             </button>
           </>
         )}
-        <button
-          className="mt-6 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
-        >
+        <button className="mt-6 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out">
           Switch Language
         </button>
       </div>
