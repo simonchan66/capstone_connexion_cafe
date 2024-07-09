@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { getFirestore, collection, getDocs, addDoc } from "firebase/firestore";
 import OrderSummary from "./OrderSummary";
+import { useLanguage } from "../_utils/LanguageContext";
+
 const OrderPage = () => {
   const [products, setProducts] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -12,11 +14,10 @@ const OrderPage = () => {
   const [cashAmount, setCashAmount] = useState(0);
   const [voucherAmount, setVoucherAmount] = useState(0);
   const [showOrderSummary, setShowOrderSummary] = useState(false);
-  const [orderNumber, setOrderNumber] = useState('');
+  const [orderNumber, setOrderNumber] = useState("");
   const [orderItems, setOrderItems] = useState([]);
 
-
-
+  const { t } = useLanguage();
 
   // it's used for updating the current date every second
   useEffect(() => {
@@ -122,7 +123,6 @@ const OrderPage = () => {
     setCart(newCart);
   };
 
-  
   const handleCheckout = () => {
     setCheckoutClicked(true);
   };
@@ -131,7 +131,7 @@ const OrderPage = () => {
   const handleCancel = () => {
     setCheckoutClicked(false);
     setCashAmount(0);
-    setVoucherAmount(0);  
+    setVoucherAmount(0);
   };
 
   const handleCashAmountChange = (e) => {
@@ -144,13 +144,15 @@ const OrderPage = () => {
 
   // confirm payment and send data to firestore
   // Assitance from github Copilot
-  
+
   const handleConfirmPayment = async () => {
     const totalPayment = cashAmount + voucherAmount;
     if (totalPayment >= totalAmount) {
       // Create a new transaction document for firestore
       const transaction_time = new Date();
-      const order_id = `${transaction_time.getSeconds()}${transaction_time.getMinutes()}${transaction_time.getHours()}${transaction_time.getMonth() + 1}${transaction_time.getDate()}${transaction_time.getFullYear()}`;
+      const order_id = `${transaction_time.getSeconds()}${transaction_time.getMinutes()}${transaction_time.getHours()}${
+        transaction_time.getMonth() + 1
+      }${transaction_time.getDate()}${transaction_time.getFullYear()}`;
 
       const order_items = cart.map((item) => ({
         item_name: item.name,
@@ -164,44 +166,42 @@ const OrderPage = () => {
         cash_amount: cashAmount,
         voucher_amount: voucherAmount,
         // will use other user data in the future
-        user_name: 'default',
+        user_name: "default",
         transaction_time: transaction_time.toISOString(),
         done: false,
       };
 
       try {
         const db = getFirestore();
-        const transactionsRef = collection(db, 'transactions');
+        const transactionsRef = collection(db, "transactions");
         await addDoc(transactionsRef, transactionData);
-        console.log('Transaction added to Firestore');
+        console.log("Transaction added to Firestore");
 
-
-      // Extract the first 3 numbers of the order ID, which is the time of transaction
-      const orderNumber = order_id.slice(0, 3);
-      setOrderNumber(orderNumber);
-      setOrderItems(order_items);
-      setShowOrderSummary(true);
-
+        // Extract the first 3 numbers of the order ID, which is the time of transaction
+        const orderNumber = order_id.slice(0, 3);
+        setOrderNumber(orderNumber);
+        setOrderItems(order_items);
+        setShowOrderSummary(true);
       } catch (error) {
-        console.error('Error adding transaction to Firestore:', error);
+        console.error("Error adding transaction to Firestore:", error);
       }
 
       // Reset state variables
-      console.log('Payment confirmed');
+      console.log("Payment confirmed");
       setCheckoutClicked(false);
       setCart([]);
       setTotalAmount(0);
       setCashAmount(0);
       setVoucherAmount(0);
     } else {
-      alert('Insufficient payment amount.');
+      alert("Insufficient payment amount.");
     }
   };
-  
+
   // Continue button of the order summary
   const handleContinue = () => {
     setShowOrderSummary(false);
-    setOrderNumber('');
+    setOrderNumber("");
     setOrderItems([]);
   };
   // Remove product from the cart
@@ -223,103 +223,103 @@ const OrderPage = () => {
   return (
     <div className="order-page">
       <header className="page-header">
-        <h1 className="page-heading-1">Connexion Cafe</h1>
+        <h1 className="page-heading-1">{t("cafe")}</h1>
         <p>{currentDate.toLocaleString()}</p>
       </header>
 
       <div className="order-content">
-
-      {!checkoutClicked ? (
+        {!checkoutClicked ? (
           <>
-        <div className="coffee-items">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="coffee-item"
-              onClick={() => addProductToCart(product)}
-            >
-              <img src={product.image} alt={product.item_name} />
-              <p>{product.name}</p>
-              <p>${product.price.toFixed(2)}</p>
+            <div className="coffee-items">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="coffee-item"
+                  onClick={() => addProductToCart(product)}
+                >
+                  <img src={product.image} alt={product.item_name} />
+                  <p>{product.name}</p>
+                  <p>${product.price.toFixed(2)}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="order-summary">
-          <h2>{"Order Summary"}</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>{"Name"}</th>
-                <th>{"Price"}</th>
-                <th>{"Quantity"}</th>
-                <th>{"Action"}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {cart.length > 0 ? (
-                cart.map((cartProduct, key) => (
-                  <tr key={key}>
-                    <td>{cartProduct.name}</td>
-                    <td>{cartProduct.price}</td>
-                    <td>{cartProduct.quantity}</td>
-                    <td>
-                      <button
-                        className="adj-btn"
-                        onClick={() =>
-                          updateProductQuantity(cartProduct, "increase")
-                        }
-                      >
-                        +
-                      </button>
-
-                      <button
-                        className="adj-btn"
-                        onClick={() =>
-                          updateProductQuantity(cartProduct, "decrease")
-                        }
-                      >
-                        -
-                      </button>
-
-                      <button
-                        className="remove-btn"
-                        onClick={() => removeProduct(cartProduct)}
-                      >
-                        X
-                      </button>
-                    </td>
+            <div className="order-summary">
+              <h2>{"Order Summary"}</h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>{"Name"}</th>
+                    <th>{"Price"}</th>
+                    <th>{"Quantity"}</th>
+                    <th>{"Action"}</th>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4">{"No Item In Cart"}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                </thead>
+                <tbody>
+                  {cart.length > 0 ? (
+                    cart.map((cartProduct, key) => (
+                      <tr key={key}>
+                        <td>{cartProduct.name}</td>
+                        <td>{cartProduct.price}</td>
+                        <td>{cartProduct.quantity}</td>
+                        <td>
+                          <button
+                            className="adj-btn"
+                            onClick={() =>
+                              updateProductQuantity(cartProduct, "increase")
+                            }
+                          >
+                            +
+                          </button>
 
-          <h3>
-            {"Total Amount"}: ${totalAmount.toFixed(2)}
-          </h3>
-          {totalAmount !== 0 ? (
-            <button className="checkout-btn" onClick={handleCheckout}>{"Checkout"}</button>
-          ) : (
-            <p>{"Please Add Product"}</p>
-          )}
-        </div>
-        
-        </>
+                          <button
+                            className="adj-btn"
+                            onClick={() =>
+                              updateProductQuantity(cartProduct, "decrease")
+                            }
+                          >
+                            -
+                          </button>
+
+                          <button
+                            className="remove-btn"
+                            onClick={() => removeProduct(cartProduct)}
+                          >
+                            X
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4">{"No Item In Cart"}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+
+              <h3>
+                {"Total Amount"}: ${totalAmount.toFixed(2)}
+              </h3>
+              {totalAmount !== 0 ? (
+                <button className="checkout-btn" onClick={handleCheckout}>
+                  {"Checkout"}
+                </button>
+              ) : (
+                <p>{"Please Add Product"}</p>
+              )}
+            </div>
+          </>
         ) : (
           <div className="payment-section bg-gray-800 p-6 rounded-lg text-white max-w-md mx-auto">
-            <h2 className="text-xl font-semibold mb-4">{'Payment'}</h2>
+            <h2 className="text-xl font-semibold mb-4">{"Payment"}</h2>
             <div>
-              <p className="mb-2">{'Payment Details'}:</p>
+              <p className="mb-2">{"Payment Details"}:</p>
               <p className="mb-2">
-                {'Total Amount'}: ${totalAmount.toFixed(2)}
+                {"Total Amount"}: ${totalAmount.toFixed(2)}
               </p>
               <div className="mb-4">
                 <label htmlFor="cashAmount" className="block mb-1">
-                  {'Amount Paid By Cash'}:
+                  {"Amount Paid By Cash"}:
                 </label>
                 <input
                   type="number"
@@ -331,7 +331,7 @@ const OrderPage = () => {
               </div>
               <div className="mb-4">
                 <label htmlFor="voucherAmount" className="block mb-1">
-                  {'Amount Paid By Voucher'}:
+                  {"Amount Paid By Voucher"}:
                 </label>
                 <input
                   type="number"
@@ -342,39 +342,39 @@ const OrderPage = () => {
                 />
               </div>
             </div>
-  
+
             {/* Buttons */}
             <div className="flex justify-end">
               <button
                 onClick={handleCancel}
                 className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition-colors duration-300 mr-2"
               >
-                {'Cancel'}
+                {"Cancel"}
               </button>
               <button
                 onClick={handleConfirmPayment}
                 className="checkout-btn text-white px-4 py-2 rounded-md transition-colors duration-300"
                 disabled={cashAmount + voucherAmount !== totalAmount}
               >
-                {'Confirm Payment'}
+                {"Confirm Payment"}
               </button>
             </div>
-  
+
             <div>
               {cashAmount + voucherAmount !== totalAmount && (
-                <p className="text-red-500 mb-4">{'Error Total Amount'}</p>
+                <p className="text-red-500 mb-4">{"Error Total Amount"}</p>
               )}
             </div>
           </div>
         )}
 
         {showOrderSummary && (
-      <OrderSummary
-        orderNumber={orderNumber}
-        orderItems={orderItems}
-        onContinue={handleContinue}
-      />
-    )}
+          <OrderSummary
+            orderNumber={orderNumber}
+            orderItems={orderItems}
+            onContinue={handleContinue}
+          />
+        )}
       </div>
     </div>
   );

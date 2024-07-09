@@ -1,6 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthContextProvider } from "./_utils/auth-context";
+import { LanguageProvider } from "./_utils/LanguageContext";
+import Language from "./_utils/Language";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -9,17 +12,14 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  const lang = await Language();
   return (
     <AuthContextProvider>
-    <html>
-
-      <body className={inter.className}>{children}</body>
-
-
-    </html>
-    
-    
-    
+      <html lang={lang}>
+        <LanguageProvider lang={lang}>
+          <body className={inter.className}>{children}</body>
+        </LanguageProvider>
+      </html>
     </AuthContextProvider>
   );
 }
