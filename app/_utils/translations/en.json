@@ -1,4 +1,18 @@
 {
-    "test": "Testing Message",
-    "cafe": "Connexion Cafe"
-  }
+    "welcomeMsg": "Welcome to Connexion Cafe POS System",
+    "nfcWaiting": "Waiting for NFC...",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign In",
+    "signInWithGitHub": "Sign In with GitHub",
+    "nfc": "NFC TAP TAP",
+    "welcome": "Welcome",
+    "goToPOSSystem": "Go to POS System",
+    "signOut": "Sign Out",
+    "switchLanguage": "Switch to Chinese"
+
+
+
+
+
+    }
