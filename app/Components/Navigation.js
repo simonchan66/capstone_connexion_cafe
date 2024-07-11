@@ -21,7 +21,7 @@ const Navigation = () => {
           <Link href="/OrderPage">{t("order")}</Link>
         </li>
         <li>
-          <Link href="/Editproduct">{t("edit")}</Link>
+          <Link href="/Editproduct">{t("editP")}</Link>
         </li>
         <li>
           <Link href="/KitchenPage">{t("kitchen")}</Link>

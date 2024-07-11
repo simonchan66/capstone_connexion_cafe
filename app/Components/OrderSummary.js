@@ -1,15 +1,13 @@
-import { useLanguage } from "../_utils/LanguageContext";
-
 const OrderSummary = ({ orderNumber, orderItems, onContinue }) => {
   const { t } = useLanguage();
   return (
     <div className="order-summary-overlay">
       <div className="order-summary-content">
-        <h2>{t("orderPlacedSuccessfully")}</h2>
+        <h1>{t("orderPlacedSuccessfully")}</h1>
         <p>{t("yourOrderNumber")}: </p>
-        <h1>{orderNumber}</h1>
+        <h1 className="text-red-300">{orderNumber}</h1>
         <h3>{t("orderSummary")}:</h3>
-        <ul>
+        <ul className="text-red-300">
           {orderItems.map((item, index) => (
             <li key={index}>
               {item.item_name} x {item.quantity}

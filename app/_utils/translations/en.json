@@ -1,5 +1,5 @@
 {
-    "welcomeMsg": "Welcome to Connexion Cafe POS System",
+    "welcomeMsg": "Connexion Cafe POS System",
     "nfcWaiting": "Waiting for NFC...",
     "email": "Email",
     "password": "Password",
@@ -13,7 +13,7 @@
     "home": "Home",
     "order": "Order",
     "stats": "Statistics",
-    "edit": "Edit",
+    "editP": "Edit",
     "kitchen": "Kitchen",
     "feedback": "Feedback",
     "dashboard": "Dashboard",
@@ -36,10 +36,27 @@
     "errorTotalAmount": "Error: Total Amount not matched!",
     "orderPlacedSuccessfully": "Order placed successfully!",
     "yourOrderNumber": "Order number",
-    "ok": "OK"
+    "ok": "OK",
+    "editProducts": "Edit Products",
+    "addNewProduct": "Add New Product",
+    "category": "Category",
+    "remark": "Remark",
+    "imageURL": "Image URL",
+    "addProduct": "Add Product",
+    "existingProducts": "Existing Products",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "updateProduct": "Update Product",
+    "productAddedSuccessfully": "Product added successfully!",
+    "errorAddingProduct": "Error adding product.",
+    "productUpdatedSuccessfully": "Product updated successfully!",
+    "errorUpdatingProduct": "Error updating product.",
+    "productDeletedSuccessfully": "Product deleted successfully!",
+    "errorDeletingProduct": "Error deleting product.",
+    "pleaseFill": "Please fill in all the fields."
 
-
-      
 
 
     }
