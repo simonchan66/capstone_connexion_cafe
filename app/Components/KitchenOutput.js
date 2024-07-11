@@ -4,7 +4,9 @@ function KitchenOutput({ callOutInfo }) {
   const [number, setNumber] = useState("");
   const audioFiles = useRef({});
   const audioQueue = useRef([]);
-
+  // All code are assisted by Copilot and Claude3.5
+  // English voice is from Envato elements
+  // Chinese voice is from Suey Kong our team member
   // Preload audio files
   useEffect(() => {
     const languages = ['en', 'zh'];
@@ -42,9 +44,9 @@ function KitchenOutput({ callOutInfo }) {
   };
 
   return (
-    <div className="mb-4">
+
       <div className="text-xl text-white">Last Called Number: {number}</div>
-    </div>
+
   );
 }
 

@@ -3,10 +3,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { useLanguage } from "../_utils/LanguageContext";
-
+import KitchenOutput from "../Components/KitchenOutput";  
+  // All code are assisted by Copilot and Claude3.5
 const Kitchen = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [callOutInfo, setCallOutInfo] = useState(null);
   const { t } = useLanguage();
   const modalRef = useRef(null);
 
@@ -81,8 +83,13 @@ const Kitchen = () => {
     }
   };
 
-  const handleCallOut = () => {
-    console.log("Call-out for order:", selectedOrder);
+  const handleCallOut = (lang) => {
+    if (selectedOrder) {
+      setCallOutInfo({
+        number: selectedOrder.order_id.slice(0, 3),
+        lang: lang
+      });
+    }
   };
 
   const formatTime = (seconds) => {
@@ -95,7 +102,8 @@ const Kitchen = () => {
 
   return (
     <main className="bg-gray-800 min-h-screen p-8">
-      <h1 className="text-3xl font-bold text-white mb-8">Kitchen Orders</h1>
+      <h1 className="text-3xl font-bold text-white mb-8">Kitchen Orders<KitchenOutput callOutInfo={callOutInfo} /></h1>
+
       <div className="grid grid-cols-3 gap-6">
         {orders.map((order) => (
           <div 
@@ -138,15 +146,15 @@ const Kitchen = () => {
               </button>
               <button 
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300"
-                onClick={handleCallOut}
+                onClick={() => handleCallOut('en')}
               >
-                Call-out
+                Call-out (English)
               </button>
               <button 
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300"
-                onClick={handleCallOut}
+                onClick={() => handleCallOut('zh')}
               >
-                叫餐
+                叫餐 (Cantonese)
               </button>
             </div>
           </div>
