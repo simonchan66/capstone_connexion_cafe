@@ -5,7 +5,11 @@ const translations = {
   en,
   zh,
 };
-export default function translator(lang, key, defaultValue = "en") {
+export default function translator(
+  lang,
+  key,
+  defaultValue = "!MISSING TRANSLATION!"
+) {
   const langTranslations = translations[lang];
   return langTranslations && langTranslations[key]
     ? langTranslations[key]

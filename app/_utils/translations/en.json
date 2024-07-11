@@ -9,10 +9,13 @@
     "welcome": "Welcome",
     "goToPOSSystem": "Go to POS System",
     "signOut": "Sign Out",
-    "switchLanguage": "Switch to Chinese"
-
-
-
-
+    "switchLanguage": "Switch to Chinese",
+    "home": "Home",
+    "order": "Order",
+    "stats": "Statistics",
+    "edit": "Edit Products",
+    "kitchen": "Kitchen",
+    "feedback": "Feedback",
+    "dashboard": "Dashboard"
 
     }
