@@ -56,7 +56,7 @@ def get_card_uid():
         return None, "No readers available"
 
     reader = r[0]
-    max_attempts = 60 # Wait for up to 30 seconds
+    max_attempts = 120 # Wait for up to 30 seconds
     for _ in range(max_attempts):
         try:
             connection = reader.createConnection()
@@ -68,7 +68,7 @@ def get_card_uid():
             if sw1 == 0x90 and sw2 == 0x00:
                 return toHexString(data), None
         except NoCardException:
-            time.sleep(1)  # Wait for 1 second before trying again
+            time.sleep(0.3)  # Wait for 0.3 second before trying again
     
     return None, "Timeout: No card detected"
 
