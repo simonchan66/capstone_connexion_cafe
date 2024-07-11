@@ -15,26 +15,27 @@ const Navigation = () => {
     <nav>
       <ul>
         <li>
-          <Link href="/">HOME</Link>
+          <Link href="/">{t("home")}</Link>
         </li>
         <li>
-          <Link href="/OrderPage">Order</Link>
+          <Link href="/OrderPage">{t("order")}</Link>
         </li>
         <li>
-          <Link href="/AllStatsPage">Stats</Link>
+          <Link href="/Editproduct">{t("editP")}</Link>
         </li>
         <li>
-          <Link href="/Editproduct">Edit</Link>
+          <Link href="/KitchenPage">{t("kitchen")}</Link>
         </li>
         <li>
-          <Link href="/Feedback">Customer</Link>
+          <Link href="/AllStatsPage">{t("stats")}</Link>
         </li>
         <li>
-          <Link href="/FeedbackDash">Dashboard</Link>
+          <Link href="/Feedback">{t("feedback")}</Link>
         </li>
         <li>
-          <Link href="/KitchenPage">Kitchen</Link>
+          <Link href="/FeedbackDash">{t("dashboard")}</Link>
         </li>
+
         <li>
           <button
             onClick={handleLanguageChange}

@@ -13,27 +13,33 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  // const { lang, setLang, t } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
 
   async function handleNFCLogin() {
-
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/nfc_login');
+      const response = await fetch("http://127.0.0.1:5000/api/nfc_login");
       const data = await response.json();
-  
+
       if (response.ok) {
-        console.log('NFC login successful. UID:', data.uid, 'Username:', data.username, 'Role:', data.role);
-        if (data.role === 'admin') {
-          router.push('/AdminPage');
+        console.log(
+          "NFC login successful. UID:",
+          data.uid,
+          "Username:",
+          data.username,
+          "Role:",
+          data.role
+        );
+        if (data.role === "admin") {
+          router.push("/AdminPage");
         } else {
-          router.push('/Home');
+          router.push("/Home");
         }
       } else {
-        console.error('NFC login failed:', data.error);
+        console.error("NFC login failed:", data.error);
       }
     } catch (error) {
-      console.error('NFC login error:', error);
+      console.error("NFC login error:", error);
     }
     setLoading(false);
   }
@@ -94,15 +100,13 @@ export default function Page() {
                 strokeWidth={2}
                 strokeWidthSecondary={2}
               />
-              <h2 className="text-2xl font-semibold mt-4">
-                Waiting for NFC...
-              </h2>
+              <h2 className="text-2xl font-semibold mt-4">{t("nfcWaiting")}</h2>
             </div>
           </div>
         )}
 
         <h1 className="text-2xl font-bold text-center text-white mb-8">
-          Welcome to Connexion Cafe POS
+          {t("welcomeMsg")}
         </h1>
         {!user && (
           <>
@@ -112,7 +116,7 @@ export default function Page() {
                   htmlFor="email"
                   className="block text-white font-semibold"
                 >
-                  Email
+                  {t("email")}
                 </label>
                 <input
                   type="email"
@@ -128,7 +132,7 @@ export default function Page() {
                   htmlFor="password"
                   className="block text-white font-semibold "
                 >
-                  Password
+                  {t("password")}
                 </label>
                 <input
                   type="password"
@@ -140,34 +144,33 @@ export default function Page() {
                 />
               </div>
               <button
-
-        type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
-      >
-        Sign In
-      </button>
-    </form>
-    <div className="space-y-4">
-      <button
-        onClick={handleSignIn}
-        className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
-      >
-        Sign In with GitHub
-      </button>
-      <button
-        onClick={handleNFCLogin}
-        className="bg-orange-600 hover:bg-orange-400 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out">
-
-        NFC TAP TAP
-      </button>
-    </div>
-  </>
+                type="submit"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+              >
+                {t("signIn")}
+              </button>
+            </form>
+            <div className="space-y-4">
+              <button
+                onClick={handleSignIn}
+                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+              >
+                {t("signInWithGitHub")}
+              </button>
+              <button
+                onClick={handleNFCLogin}
+                className="bg-orange-600 hover:bg-orange-400 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+              >
+                {t("nfc")}
+              </button>
+            </div>
+          </>
         )}
         {user && (
           <>
             <div className="text-center mb-6">
               <p className="text-white text-xl font-semibold">
-                Welcome, {user.displayName || "Anonymous User"}
+                {t("welcome")}, {user.displayName || "Anonymous User"}
               </p>
               <p className="text-gray-400">{user.email || "Anonymous"}</p>
             </div>
@@ -175,18 +178,22 @@ export default function Page() {
               href="/Home"
               className="block bg-green-600 hover:bg-green-700 text-white text-center font-bold py-3 px-6 rounded-full mb-4 transition duration-300 ease-in-out"
             >
-              Go to POS System
+              {t("goToPOSSystem")}
             </Link>
             <button
               onClick={handleSignOut}
               className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
             >
-              Sign Out
+              {t("signOut")}
             </button>
           </>
         )}
-        <button className="mt-6 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out">
-          Switch Language
+
+        <button
+          onClick={handleLanguageChange}
+          className="mt-6 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full w-full transition duration-300 ease-in-out"
+        >
+          {t("switchLanguage")}
         </button>
       </div>
     </main>

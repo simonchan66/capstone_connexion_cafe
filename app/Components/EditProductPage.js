@@ -9,6 +9,7 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
+import { useLanguage } from "../_utils/LanguageContext";
 
 const EditProductPage = () => {
   // Alls functions are written with assistance from github Copilot
@@ -41,7 +42,7 @@ const EditProductPage = () => {
       !newProduct.description ||
       !newProduct.image
     ) {
-      alert("Please fill in all the fields.");
+      alert(t("pleaseFill"));
       return;
     }
 
@@ -63,10 +64,10 @@ const EditProductPage = () => {
         name: "",
       });
       fetchProducts();
-      alert("Product Added Successfully");
+      alert(t("productAddedSuccessfully"));
     } catch (error) {
       console.error("Error adding product:", error);
-      alert("ErrorAddingProduct");
+      alert(t("errorAddingProduct"));
     }
   };
 
@@ -140,10 +141,10 @@ const EditProductPage = () => {
         name: "",
       });
       fetchProducts();
-      alert("Product Updated Successfully");
+      alert(t("productUpdatedSuccessfully"));
     } catch (error) {
       console.error("Error updating product:", error);
-      alert("Error Updating Product");
+      alert(t("errorUpdatingProduct"));
     }
   };
 
@@ -157,29 +158,31 @@ const EditProductPage = () => {
       // deleteDoc is a function that deletes a document from the firestore database
       await deleteDoc(productRef);
       fetchProducts();
-      alert("Product Deleted Successfully");
+      alert(t("productDeletedSuccessfully"));
     } catch (error) {
       console.error("Error deleting product:", error);
-      alert("Error Deleting Product");
+      alert(t("errorDeletingProduct"));
     }
   };
+
+  const { t } = useLanguage();
 
   return (
     // return the JSX for the EditProductPage component
     <div className="edit-product-page">
       <header className="page-header">
-        <h1 className="page-heading-1">Edit Products</h1>
+        <h1 className="page-heading-1">{t("editProducts")}</h1>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <h2 className="page-heading-2">Add New Product</h2>
+          <h2 className="page-heading-2">{t("addNewProduct")}</h2>
           <div className="mb-4">
             <label
               htmlFor="name"
               className="block font-semibold mb-1 text-white"
             >
-              Name
+              {t("name")}
             </label>
             <input
               type="text"
@@ -195,7 +198,7 @@ const EditProductPage = () => {
               htmlFor="category"
               className="block font-semibold mb-1 text-white"
             >
-              Category
+              {t("category")}
             </label>
             <input
               type="text"
@@ -211,7 +214,7 @@ const EditProductPage = () => {
               htmlFor="description"
               className="block font-semibold mb-1 text-white"
             >
-              Description
+              {t("remark")}
             </label>
             <textarea
               id="description"
@@ -226,7 +229,7 @@ const EditProductPage = () => {
               htmlFor="image"
               className="block font-semibold mb-1 text-white"
             >
-              Image URL
+              {t("imageURL")}
             </label>
             <input
               type="text"
@@ -242,7 +245,7 @@ const EditProductPage = () => {
               htmlFor="price"
               className="block font-semibold mb-1 text-white"
             >
-              Price
+              {t("price")}
             </label>
             <input
               type="number"
@@ -255,21 +258,29 @@ const EditProductPage = () => {
           </div>
           <div className="flex justify-end">
             <button onClick={handleAddProduct} className="page-button">
-              Add Product
+              {t("addProduct")}
             </button>
           </div>
         </div>
         <div>
           <h2 className="text-xl font-semibold mb-4 text-white">
-            Existing Products
+            {t("existingProducts")}
           </h2>
           <table className="w-full table-auto">
             <thead>
               <tr>
-                <th className="px-4 py-2 text-left text-gray-400">Name</th>
-                <th className="px-4 py-2 text-left text-gray-400">Category</th>
-                <th className="px-4 py-2 text-left text-gray-400">Price</th>
-                <th className="px-4 py-2 text-left text-gray-400">Actions</th>
+                <th className="px-4 py-2 text-left text-gray-400">
+                  {t("name")}
+                </th>
+                <th className="px-4 py-2 text-left text-gray-400">
+                  {t("category")}
+                </th>
+                <th className="px-4 py-2 text-left text-gray-400">
+                  {t("price")}
+                </th>
+                <th className="px-4 py-2 text-left text-gray-400">
+                  {t("actions")}
+                </th>
               </tr>
             </thead>
 
@@ -287,13 +298,13 @@ const EditProductPage = () => {
                       onClick={() => handleEditProduct(product)}
                       className="button-edit"
                     >
-                      {"Edit"}
+                      {t("edit")}
                     </button>
                     <button
                       onClick={() => handleDeleteProduct(product.id)}
                       className="button-delete"
                     >
-                      {"Delete"}
+                      {t("delete")}
                     </button>
                   </td>
                 </tr>
@@ -306,14 +317,14 @@ const EditProductPage = () => {
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
           <div className="bg-gray-900 rounded-lg p-8">
             <h2 className="text-xl font-semibold mb-4 text-white">
-              {"Edit Product"}
+              {t("edit")}
             </h2>
             <div className="mb-4">
               <label
                 htmlFor="name"
                 className="block font-semibold mb-1 text-white"
               >
-                {"Name"}
+                {t("name")}
               </label>
               <input
                 type="text"
@@ -329,7 +340,7 @@ const EditProductPage = () => {
                 htmlFor="category"
                 className="block font-semibold mb-1 text-white"
               >
-                {"Category"}
+                {t("category")}
               </label>
               <input
                 type="text"
@@ -345,7 +356,7 @@ const EditProductPage = () => {
                 htmlFor="description"
                 className="block font-semibold mb-1 text-white"
               >
-                {"Description"}
+                {t("remark")}
               </label>
               <textarea
                 id="description"
@@ -360,7 +371,7 @@ const EditProductPage = () => {
                 htmlFor="image"
                 className="block font-semibold mb-1 text-white"
               >
-                {"Image URL"}
+                {t("imageURL")}
               </label>
               <input
                 type="text"
@@ -376,7 +387,7 @@ const EditProductPage = () => {
                 htmlFor="price"
                 className="block font-semibold mb-1 text-white"
               >
-                {"Price"}
+                {t("price")}
               </label>
               <input
                 type="number"
@@ -389,16 +400,16 @@ const EditProductPage = () => {
             </div>
             <div className="flex justify-end">
               <button
-                onClick={() => setEditingProduct(null)}
-                className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition-colors duration-300 mr-2"
+                onClick={handleUpdateProduct}
+                className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300 mr-2"
               >
-                {"cancel"}
+                {t("updateProduct")}
               </button>
               <button
-                onClick={handleUpdateProduct}
-                className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
+                onClick={() => setEditingProduct(null)}
+                className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition-colors duration-300 "
               >
-                {"updateProduct"}
+                {t("cancel")}
               </button>
             </div>
           </div>
