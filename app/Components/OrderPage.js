@@ -223,7 +223,7 @@ const OrderPage = () => {
   return (
     <div className="order-page">
       <header className="page-header">
-        <h1 className="page-heading-1">{t("cafe")}</h1>
+        <h1 className="page-heading-1">{t("connexionCafe")}</h1>
         <p>{currentDate.toLocaleString()}</p>
       </header>
 
@@ -244,14 +244,14 @@ const OrderPage = () => {
               ))}
             </div>
             <div className="order-summary">
-              <h2>{"Order Summary"}</h2>
+              <h2>{t("orderSummary")}</h2>
               <table>
                 <thead>
                   <tr>
-                    <th>{"Name"}</th>
-                    <th>{"Price"}</th>
-                    <th>{"Quantity"}</th>
-                    <th>{"Action"}</th>
+                    <th>{t("name")}</th>
+                    <th>{t("price")}</th>
+                    <th>{t("quantity")}</th>
+                    <th>{t("action")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -291,35 +291,35 @@ const OrderPage = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="4">{"No Item In Cart"}</td>
+                      <td colSpan="4">{t("noItemInCart")}</td>
                     </tr>
                   )}
                 </tbody>
               </table>
 
               <h3>
-                {"Total Amount"}: ${totalAmount.toFixed(2)}
+                {t("totalAmount")}: ${totalAmount.toFixed(2)}
               </h3>
               {totalAmount !== 0 ? (
                 <button className="checkout-btn" onClick={handleCheckout}>
-                  {"Checkout"}
+                  {t("checkout")}
                 </button>
               ) : (
-                <p>{"Please Add Product"}</p>
+                <p>{t("pleaseAddProduct")}</p>
               )}
             </div>
           </>
         ) : (
           <div className="payment-section bg-gray-800 p-6 rounded-lg text-white max-w-md mx-auto">
-            <h2 className="text-xl font-semibold mb-4">{"Payment"}</h2>
+            <h2 className="text-xl font-semibold mb-4">{t("payment")}</h2>
             <div>
-              <p className="mb-2">{"Payment Details"}:</p>
+              <p className="mb-2">{t("paymentDetails")}:</p>
               <p className="mb-2">
-                {"Total Amount"}: ${totalAmount.toFixed(2)}
+                {t("totalAmount")}: ${totalAmount.toFixed(2)}
               </p>
               <div className="mb-4">
                 <label htmlFor="cashAmount" className="block mb-1">
-                  {"Amount Paid By Cash"}:
+                  {t("amountPaidByCash")}:
                 </label>
                 <input
                   type="number"
@@ -331,7 +331,7 @@ const OrderPage = () => {
               </div>
               <div className="mb-4">
                 <label htmlFor="voucherAmount" className="block mb-1">
-                  {"Amount Paid By Voucher"}:
+                  {t("amountPaidByVoucher")}:
                 </label>
                 <input
                   type="number"
@@ -349,20 +349,20 @@ const OrderPage = () => {
                 onClick={handleCancel}
                 className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition-colors duration-300 mr-2"
               >
-                {"Cancel"}
+                {t("cancel")}
               </button>
               <button
                 onClick={handleConfirmPayment}
                 className="checkout-btn text-white px-4 py-2 rounded-md transition-colors duration-300"
                 disabled={cashAmount + voucherAmount !== totalAmount}
               >
-                {"Confirm Payment"}
+                {t("confirmPayment")}
               </button>
             </div>
 
             <div>
               {cashAmount + voucherAmount !== totalAmount && (
-                <p className="text-red-500 mb-4">{"Error Total Amount"}</p>
+                <p className="text-red-500 mb-4">{t("errorTotalAmount")}</p>
               )}
             </div>
           </div>

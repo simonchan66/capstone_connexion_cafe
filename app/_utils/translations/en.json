@@ -4,7 +4,7 @@
     "email": "Email",
     "password": "Password",
     "signIn": "Sign In",
-    "signInWithGitHub": "Sign In with GitHub",
+    "signInWithGitHub": "Sign in with GitHub",
     "nfc": "NFC TAP TAP",
     "welcome": "Welcome",
     "goToPOSSystem": "Go to POS System",
@@ -13,9 +13,33 @@
     "home": "Home",
     "order": "Order",
     "stats": "Statistics",
-    "edit": "Edit Products",
+    "edit": "Edit",
     "kitchen": "Kitchen",
     "feedback": "Feedback",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "connexionCafe": "Connexion Cafe",
+    "orderSummary": "Order Summary",
+    "name": "Name",
+    "price": "Price",
+    "quantity": "Quantity",
+    "action": "Action",
+    "noItemInCart": "No Item In Cart",
+    "totalAmount": "Total Amount",
+    "pleaseAddProduct": "Please add a product to the cart",
+    "checkout": "Checkout",
+    "payment": "Payment",
+    "paymentDetails": "Payment Details",
+    "amountPaidByCash": "Amount Paid by Cash",
+    "amountPaidByVoucher": "Amount Paid by Voucher",
+    "cancel": "Cancel",
+    "confirmPayment": "Confirm Payment",
+    "errorTotalAmount": "Error: Total Amount not matched!",
+    "orderPlacedSuccessfully": "Order placed successfully!",
+    "yourOrderNumber": "Your order number",
+    "ok": "OK"
+
+
+      
+
 
     }
