@@ -155,6 +155,33 @@ const FeedbackDashboard = () => {
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
 
+  const [sortByEmoji, setSortByEmoji] = useState(false);
+
+  const handleEmojiSortToggle = () => {
+    setSortByEmoji(!sortByEmoji);
+  };
+
+  const sortedFeedbackData = [...feedbackData].sort((a, b) => {
+    if (sortByEmoji) {
+      if (a.mood && b.mood) {
+        // Only compare if both moods are defined
+        return a.mood.localeCompare(b.mood);
+      } else if (a.mood) {
+        // If a has mood but b doesn't, a comes first
+        return -1;
+      } else {
+        // If b has mood but a doesn't, b comes first
+        return 1;
+      }
+    } else {
+      return b.feedback_time - a.feedback_time;
+    }
+  });
+
+  const sortedEmojis = sortedFeedbackData
+    .filter((feedback) => feedback.mood !== undefined) // Filter for valid emojis
+    .map((feedback) => feedback.mood);
+
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
@@ -185,7 +212,6 @@ const FeedbackDashboard = () => {
   return (
     <div>
       <div className="items-center justify-between mb-4">
-
         <h1 className="text-xl font-bold">
           Feedback Dashboard
           <button
@@ -193,30 +219,24 @@ const FeedbackDashboard = () => {
               timeFilter === "all" ? "bg-blue-500 text-white" : "bg-gray-600"
             }`}
             onClick={() => setTimeFilter("all")}
-
           >
             All Time
           </button>
           <button
-
             className={`text-sm mr-2 p-2 ${
               timeFilter === "today" ? "bg-blue-500 text-white" : "bg-gray-600"
             }`}
             onClick={() => setTimeFilter("today")}
-
           >
             Today
           </button>
           <button
-
-
             className={`text-sm p-2 ${
               timeFilter === "thisMonth"
                 ? "bg-blue-500 text-white"
                 : "bg-gray-600"
             }`}
             onClick={() => setTimeFilter("thisMonth")}
-
           >
             This Month
           </button>
@@ -354,11 +374,24 @@ const FeedbackDashboard = () => {
           </div>
           {/* Emoji Display */}
           <div className="bg-gray-700 p-4 rounded shadow col-span-2 md:col-span-1">
-            <h2 className="text-lg font-bold mb-2">Collected Emojis</h2>
-            <div className="flex flex-wrap items-center justify-left">
-              {feedbackData.map((feedback, index) => (
-                <span key={index} className="text-3xl pb-2">
-                  {feedback.mood}
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-lg font-bold">Collected Emojis</h2>
+              <div className="flex items-center">
+                {" "}
+                {/* Container for text and button */}
+                <span className="mr-2">Sort by:</span> {/* Text label */}
+                <button
+                  onClick={handleEmojiSortToggle}
+                  className="font-bold bg-blue-500 text-white hover:bg-blue-400"
+                >
+                  {sortByEmoji ? "Time" : "Emoji"}
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 justify-left">
+              {sortedEmojis.map((emoji, index) => (
+                <span key={index} className="text-3xl inline-block">
+                  {emoji}
                 </span>
               ))}
             </div>
