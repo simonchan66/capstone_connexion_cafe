@@ -18,7 +18,7 @@ def connect_to_reader(reader):
             return connection
         except NoCardException:
             print("Waiting for card...")
-            time.sleep(1)  # Wait a second and try again
+            time.sleep(0.3)  # Wait a second and try again
 
 def send_apdu(connection, apdu):
     """ Send APDU command to the card and print the response. """
