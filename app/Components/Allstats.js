@@ -17,6 +17,7 @@ import { useUserAuth } from "../_utils/auth-context";
 import { useRouter } from "next/navigation";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { useLanguage } from "../_utils/LanguageContext";
 
 const Allstats = () => {
   const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
@@ -28,6 +29,7 @@ const Allstats = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
   const [startDate, endDate] = selectedDateRange;
+  const { t } = useLanguage();
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -142,7 +144,7 @@ const Allstats = () => {
   };
 
   if (isLoading) {
-    return <div className="text-white text-xl">Loading...</div>; // Or a loading spinner, etc.
+    return <div className="text-white text-xl">{t("loading")}</div>; // Or a loading spinner, etc.
   }
 
   // To generate PDF report, assisted by chatgpt and copilot
@@ -158,7 +160,9 @@ const Allstats = () => {
     const dateRangeText = selectedDate
       ? `Date: ${selectedDate.toLocaleDateString("en-US")}`
       : startDate && endDate
-      ? `Date Range: ${startDate.toLocaleDateString("en-US")} - ${endDate.toLocaleDateString("en-US")}`
+      ? `Date Range: ${startDate.toLocaleDateString(
+          "en-US"
+        )} - ${endDate.toLocaleDateString("en-US")}`
       : "All Transactions";
     doc.text(dateRangeText, 14, 32);
 
@@ -181,81 +185,81 @@ const Allstats = () => {
     doc.save("transaction_report.pdf");
   };
 
-
   return (
     <div className="order-page">
       <header className="bg-gray-800 text-white py-4 px-6 flex justify-between items-center top-0 z-10">
-        <h1 className="text-xl font-semibold">{"orders"}</h1>
-        <div className="flex items-center space-x-4">
-          <div>
-            <label
-              htmlFor="datePicker"
-              className="text-sm font-medium text-white mr-2"
-            >
-              {"Select Date"}:
-            </label>
-            <DatePicker
-              id="datePicker"
-              selected={selectedDate}
-              onChange={(date) => {
-                setSelectedDate(date);
-                setSelectedDateRange([null, null]);
-              }}
-              dateFormat="yyyy-MM-dd"
-              placeholderText={"Select Date"}
-              className="py-1 px-2 border text-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="dateRangePicker"
-              className="text-sm font-medium text-white mr-2"
-            >
-              {"Select Date Range"}:
-            </label>
-            <DatePicker
-              id="dateRangePicker"
-              selected={startDate}
-              onChange={(dates) => {
-                const [start, end] = dates;
-                setSelectedDateRange([start, end]);
-                setSelectedDate(null);
-              }}
-              startDate={startDate}
-              endDate={endDate}
-              selectsRange
-              dateFormat="yyyy-MM-dd"
-              placeholderText={"Select Date Range"}
-              className="py-1 px-2 border text-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-            />
-          </div>
-          <button
-            onClick={handleTodayTransactions}
-            className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
-          >
-            {"Today"}
-          </button>
-          <button
-            onClick={handleLast7DaysTransactions}
-            className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
-          >
-            {"Last 7 Days"}
-          </button>
-          <button
-            onClick={handleMonthTransactions}
-            className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
-          >
-            {"This Month"}
-          </button>
-        </div>
+        <h1 className="text-xl font-semibold">{t("stats")} </h1>
       </header>
+      <div className="flex items-center space-x-4">
+        <div>
+          <label
+            htmlFor="datePicker"
+            className="text-sm font-medium text-white mr-2"
+          >
+            {t("selectDate")}:
+          </label>
+          <DatePicker
+            id="datePicker"
+            selected={selectedDate}
+            onChange={(date) => {
+              setSelectedDate(date);
+              setSelectedDateRange([null, null]);
+            }}
+            dateFormat="yyyy-MM-dd"
+            placeholderText={t("selectDate")}
+            className="py-1 px-2 border text-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="dateRangePicker"
+            className="text-sm font-medium text-white mr-2"
+          >
+            {t("selectDateRange")}:
+          </label>
+          <DatePicker
+            id="dateRangePicker"
+            selected={startDate}
+            onChange={(dates) => {
+              const [start, end] = dates;
+              setSelectedDateRange([start, end]);
+              setSelectedDate(null);
+            }}
+            startDate={startDate}
+            endDate={endDate}
+            selectsRange
+            dateFormat="yyyy-MM-dd"
+            placeholderText={t("selectDateRange")}
+            className="py-1 px-2 border text-black border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+          />
+        </div>
+        <button
+          onClick={handleTodayTransactions}
+          className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
+        >
+          {t("today")}
+        </button>
+        <button
+          onClick={handleLast7DaysTransactions}
+          className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
+        >
+          {t("last7Days")}
+        </button>
+        <button
+          onClick={handleMonthTransactions}
+          className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 transition-colors duration-300"
+        >
+          {t("thisMonth")}
+        </button>
+      </div>
+
       <div className="flex justify-end mt-4 mr-6">
-      <button
-  onClick={generatePdfReport}
-  className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition-colors duration-300"
->
-  Generate PDF Report
-</button>
+        <button
+          onClick={generatePdfReport}
+          className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition-colors duration-300"
+        >
+          {t("generateReport")}
+        </button>
       </div>
       <div className="orders-container p-6">
         {orders.length > 0 ? (
@@ -263,12 +267,12 @@ const Allstats = () => {
             <table className="w-full table-auto">
               <thead>
                 <tr className="bg-gray-800 text-white">
-                  <th className="px-4 py-2">{"Order Id"}</th>
-                  <th className="px-4 py-2">{"User"}</th>
-                  <th className="px-4 py-2">{"Date"}</th>
-                  <th className="px-4 py-2">{"Time"}</th>
-                  <th className="px-4 py-2">{"Total Amount"}</th>
-                  <th className="px-4 py-2">{"Actions"}</th>
+                  <th className="px-4 py-2">{t("orderId")}</th>
+                  <th className="px-4 py-2">{t("user")}</th>
+                  <th className="px-4 py-2">{t("date")}</th>
+                  <th className="px-4 py-2">{t("time")}</th>
+                  <th className="px-4 py-2">{t("totalAmount")}</th>
+                  <th className="px-4 py-2">{t("actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -306,27 +310,29 @@ const Allstats = () => {
             </table>
           </div>
         ) : (
-          <p className="text-gray-500">{"noOrdersFound"}</p>
+          <p className="text-gray-500">{t("noOrdersFound")}</p>
         )}
       </div>
       {showOrderDetails && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg text-black">
             <div className="mb-4">
-              <h2 className="text-lg font-semibold">{"Order Details"}</h2>
+              <h2 className="text-lg font-semibold">{t("orderDetails")}</h2>
               <p>
-                {"orderId"}: {selectedOrder.order_id}
+                {t("orderId")}: {selectedOrder.order_id}
               </p>
               <p>
-                {"user"}: {selectedOrder.user_name}
+                {t("user")}: {selectedOrder.user_name}
               </p>
               <p>
-                {"date"}:{" "}
+                {t("date")}:{" "}
                 {new Date(selectedOrder.transaction_time).toLocaleString()}
               </p>
             </div>
             <div className="mb-4">
-              <h3 className="text-md font-semibold mb-2">{"items"}:</h3>
+              <h3 className="text-md font-semibold mb-2">
+                {t("orderSummary")}:
+              </h3>
               <ul>
                 {selectedOrder.order_items.map((item, index) => (
                   <li key={index}>
@@ -338,13 +344,13 @@ const Allstats = () => {
             <div className="flex justify-between">
               <div>
                 <p>
-                  {"totalAmount"}: ${selectedOrder.total_amount.toFixed(2)}
+                  {t("totalAmount")}: ${selectedOrder.total_amount.toFixed(2)}
                 </p>
                 <p>
-                  {"cash"}: ${selectedOrder.cash_amount.toFixed(2)}
+                  {t("cash")}: ${selectedOrder.cash_amount.toFixed(2)}
                 </p>
                 <p>
-                  {"voucher"}: ${selectedOrder.voucher_amount.toFixed(2)}
+                  {t("voucher")}: ${selectedOrder.voucher_amount.toFixed(2)}
                 </p>
               </div>
             </div>
@@ -352,7 +358,7 @@ const Allstats = () => {
               className="bg-gray-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-gray-600 transition-colors duration-300"
               onClick={handleCloseOrderDetails}
             >
-              {"close"}
+              {t("close")}
             </button>
           </div>
         </div>

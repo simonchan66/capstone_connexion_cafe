@@ -55,5 +55,21 @@
   "errorUpdatingProduct": "更新產品時發生錯誤",
   "productDeletedSuccessfully": "成功刪除產品!",
   "errorDeletingProduct": "刪除產品時發生錯誤",
-  "pleaseFill": "請填寫所有欄位"
+  "pleaseFill": "請填寫所有欄位",
+  "loading": "載入中...",
+  "selectDate": "選擇日期",
+  "selectDateRange": "選擇日期範圍",
+  "today": "今天",
+  "last7Days": "過去七天",
+  "thisMonth": "本月",
+  "generateReport": "輸出PDF報告",
+  "orderId": "訂單編號",
+  "user": "使用者",
+  "date": "日期",
+  "time": "時間",
+  "noOrdersFound": "沒有訂單記錄",
+  "orderDetails": "訂單記錄",
+  "cash": "現金",
+  "voucher": "預付卡",
+  "close": "關閉"
   }

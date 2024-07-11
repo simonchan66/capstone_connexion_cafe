@@ -55,7 +55,26 @@
     "errorUpdatingProduct": "Error updating product.",
     "productDeletedSuccessfully": "Product deleted successfully!",
     "errorDeletingProduct": "Error deleting product.",
-    "pleaseFill": "Please fill in all the fields."
+    "pleaseFill": "Please fill in all the fields.",
+    "loading": "Loading...",
+    "selectDate": "Select Date",
+    "selectDateRange": "Select Date Range",
+    "today": "Today",
+    "last7Days": "Last 7 Days",
+    "thisMonth": "This Month",
+    "generateReport": "Generate PDF Report",
+    "orderId": "Order ID",
+    "user": "User",
+    "date": "Date",
+    "time": "Time",
+    "totalAmount": "Total Amount",
+    "actions": "Actions",
+    "noOrdersFound": "No orders found.",
+    "orderDetails": "Order Details",
+    "items": "Items",
+    "cash": "Cash",
+    "voucher": "Voucher",
+    "close": "Close"
 
 
 
