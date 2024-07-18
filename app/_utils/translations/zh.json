@@ -82,10 +82,13 @@
   "recentNegativeFeedback": "最近負面評論",
   "browserDistribution": "瀏覽器分佈",
   "collectedEmojis": "顧客感受",
-
   "Vibe": "氣氛",
   "Service": "服務",
   "Product": "產品",
   "Price": "價格",
-  "Cleanliness": "整潔"
+  "Cleanliness": "整潔",
+
+  "translateFunctionDemonstration": "翻譯示範",
+  "chineseOnly":"你睇唔明嘅字 =]"
+
   }

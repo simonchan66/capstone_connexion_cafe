@@ -75,7 +75,6 @@
     "cash": "Cash",
     "voucher": "Voucher",
     "close": "Close",
-
     "feedbackDashboard": "Feedback Dashboard",
     "allTime": "All Time",
     "overallScore": "Overall Score",
@@ -86,13 +85,14 @@
     "recentNegativeFeedback": "Recent Negative Feedback",
     "browserDistribution": "Browser Distribution",
     "collectedEmojis": "Collected Emojis",
-
-
-
-
     "Vibe": "Vibe",
     "Service": "Service",
     "Product": "Product",
     "Price": "Price",
-    "Cleanliness": "Cleanliness"
+    "Cleanliness": "Cleanliness",
+
+
+    "translateFunctionDemonstration": "Translate Function Demonstration",
+    "englishOnly":"You can read me =]"
+
     }
