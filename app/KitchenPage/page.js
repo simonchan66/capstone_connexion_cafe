@@ -126,17 +126,20 @@ const Kitchen = () => {
       const db = getFirestore();
       const orderRef = doc(db, "transactions", orderId);
 
-      setUrgentOrders((prevUrgentOrders) => {
-        if (prevUrgentOrders.includes(orderId)) {
-          return prevUrgentOrders.filter((id) => id !== orderId);
-        } else {
-          return [orderId, ...prevUrgentOrders];
-        }
-      });
+      const updatedUrgentOrders = urgentOrders.includes(orderId)
+        ? urgentOrders.filter((id) => id !== orderId)
+        : [orderId, ...urgentOrders];
 
       await updateDoc(orderRef, { urgent: !urgentOrders.includes(orderId) });
+      setUrgentOrders(updatedUrgentOrders);
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId
+            ? { ...order, urgent: !urgentOrders.includes(orderId) }
+            : order
+        )
+      );
     } catch (error) {
-      // Handle the error (e.g., revert UI changes, show notification)
       console.error("Error updating order urgency:", error);
     }
   };
@@ -146,14 +149,11 @@ const Kitchen = () => {
       const db = getFirestore();
       const orderRef = doc(db, "transactions", orderId);
 
-      // Fetch the current status of the order
       const orderDoc = await getDoc(orderRef);
       const currentOnHoldStatus = orderDoc.data().onHold || false;
 
-      // Update the order's onHold status in Firestore
       await updateDoc(orderRef, { onHold: !currentOnHoldStatus });
 
-      // Update local state immediately
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order.id === orderId
@@ -238,27 +238,31 @@ const Kitchen = () => {
             <div className="flex justify-end mt-2 space-x-2">
               {" "}
               <button
-                onClick={() => handleUrgent(order.id)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleUrgent(order.id);
+                }}
                 className={`px-2 py-1 text-xs rounded ${
                   urgentOrders.includes(order.id)
-                    ? "bg-yellow-600"
-                    : "bg-yellow-800  : hover:bg-yellow-700"
+                    ? "bg-yellow-600 hover:bg-yellow-700"
+                    : "bg-yellow-800 hover:bg-yellow-700"
                 }`}
               >
-                {" "}
-                {urgentOrders.includes(order.id) ? "Unpush" : "Push"}{" "}
-              </button>{" "}
+                {urgentOrders.includes(order.id) ? "Unpush" : "Push"}
+              </button>
               <button
-                onClick={() => handleHold(order.id)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleHold(order.id);
+                }}
                 className={`px-2 py-1 text-xs rounded ${
-                  order.onHold // Corrected condition to check order.onHold
-                    ? "bg-gray-400" // Style for "Unhold"
-                    : "bg-gray-600 hover:bg-gray-500" // Style for "Hold"
+                  order.onHold
+                    ? "bg-gray-400  hover:bg-gray-700"
+                    : "bg-gray-600 hover:bg-gray-500"
                 }`}
               >
                 {order.onHold ? "Unhold" : "Hold"}
-                {/* Toggle text based on onHold status */}{" "}
-              </button>{" "}
+              </button>
             </div>{" "}
           </div>
         ))}{" "}
