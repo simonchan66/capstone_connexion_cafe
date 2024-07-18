@@ -382,18 +382,17 @@ const FeedbackDashboard = () => {
           </div>
           {/* Emoji Display */}
           <div className="bg-gray-700 p-4 rounded shadow col-span-2 md:col-span-1">
-
             <div className="flex justify-between items-center mb-2">
-              <h2 className="text-lg font-bold">Collected Emojis</h2>
+              <h2 className="text-lg font-bold">{t("collectedEmojis")}</h2>
               <div className="flex items-center">
                 {" "}
                 {/* Container for text and button */}
-                <span className="mr-2">Sort by:</span> {/* Text label */}
+                <span className="mr-2">{t("sortBy")}:</span> {/* Text label */}
                 <button
                   onClick={handleEmojiSortToggle}
                   className="font-bold bg-blue-500 text-white hover:bg-blue-400"
                 >
-                  {sortByEmoji ? "Time" : "Emoji"}
+                  {sortByEmoji ? t("time") : t("emoji")}
                 </button>
               </div>
             </div>
@@ -401,7 +400,6 @@ const FeedbackDashboard = () => {
               {sortedEmojis.map((emoji, index) => (
                 <span key={index} className="text-3xl inline-block">
                   {emoji}
-
                 </span>
               ))}
             </div>
