@@ -9,10 +9,11 @@ import {
   getDocs,
   doc,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { useLanguage } from "../_utils/LanguageContext";
 import KitchenOutput from "../Components/KitchenOutput";
-// All code are assisted by Copilot and Claude3.5
+// All code are assisted by Copilot, ChatGPT, Gemini and Claude3.5
 const Kitchen = () => {
   const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -29,29 +30,47 @@ const Kitchen = () => {
 
       try {
         const querySnapshot = await getDocs(q);
-        const ordersData = querySnapshot.docs.map((doc) => ({
+        const newOrdersData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          elapsedTime: 0,
-        })); // Sort the ordersData here
+        }));
 
-        ordersData.sort((a, b) => {
-          if (urgentOrders.includes(a.id)) return -1; // Urgent orders come first
-          if (urgentOrders.includes(b.id)) return 1;
-          return new Date(a.transaction_time) - new Date(b.transaction_time);
+        setOrders((prevOrders) => {
+          // Merge new orders with existing ones, preserving elapsedTime
+          const updatedOrders = newOrdersData.map((newOrder) => {
+            const existingOrder = prevOrders.find(
+              (order) => order.id === newOrder.id
+            );
+            return existingOrder
+              ? { ...newOrder, elapsedTime: existingOrder.elapsedTime }
+              : { ...newOrder, elapsedTime: 0 }; // New order, so elapsedTime is 0
+          });
+
+          // Prioritize and sort as before
+          const sortedOrders = updatedOrders.sort((a, b) => {
+            if (a.urgent !== b.urgent) {
+              return a.urgent ? -1 : 1;
+            } else {
+              return (
+                new Date(a.transaction_time) - new Date(b.transaction_time)
+              );
+            }
+          });
+          return sortedOrders;
         });
 
-        setOrders(ordersData); // Update orders state
+        setUrgentOrders(
+          newOrdersData.filter((order) => order.urgent).map((order) => order.id)
+        );
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
     fetchOrders();
-    const interval = setInterval(fetchOrders, 30000);
-
+    const interval = setInterval(fetchOrders, 3000);
     return () => clearInterval(interval);
-  }, [urgentOrders]); // Remove ordersData from dependency array
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -103,22 +122,38 @@ const Kitchen = () => {
   };
 
   const handleUrgent = async (orderId) => {
-    setUrgentOrders((prev) => [
-      orderId,
-      ...prev.filter((id) => id !== orderId),
-    ]); // Add/remove from urgent list // Optionally, update Firestore with urgent status
+    try {
+      const db = getFirestore();
+      const orderRef = doc(db, "transactions", orderId);
+
+      setUrgentOrders((prevUrgentOrders) => {
+        if (prevUrgentOrders.includes(orderId)) {
+          return prevUrgentOrders.filter((id) => id !== orderId);
+        } else {
+          return [orderId, ...prevUrgentOrders];
+        }
+      });
+
+      await updateDoc(orderRef, { urgent: !urgentOrders.includes(orderId) });
+    } catch (error) {
+      // Handle the error (e.g., revert UI changes, show notification)
+      console.error("Error updating order urgency:", error);
+    }
   };
 
   const handleHold = async (orderId) => {
     try {
       const db = getFirestore();
-      const orderRef = doc(db, "transactions", orderId); // Fetch the current order data to get its onHold status
+      const orderRef = doc(db, "transactions", orderId);
 
-      const orderDoc = await getDocs(orderRef);
-      const currentOnHoldStatus = orderDoc.data().onHold || false; // Default to false if not set
+      // Fetch the current status of the order
+      const orderDoc = await getDoc(orderRef);
+      const currentOnHoldStatus = orderDoc.data().onHold || false;
 
-      await updateDoc(orderRef, { onHold: !currentOnHoldStatus }); // Update the state optimistically to provide immediate feedback
+      // Update the order's onHold status in Firestore
+      await updateDoc(orderRef, { onHold: !currentOnHoldStatus });
 
+      // Update local state immediately
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order.id === orderId
@@ -127,7 +162,7 @@ const Kitchen = () => {
         )
       );
     } catch (error) {
-      console.error("Error updating order:", error); // Handle error (e.g., show a notification)
+      console.error("Error updating order:", error);
     }
   };
 
@@ -148,6 +183,8 @@ const Kitchen = () => {
 
   const isLate = (elapsedTime) => elapsedTime >= 1800;
 
+  const displayOrders = orders.filter((order) => !order.done);
+
   return (
     <main className="bg-gray-800 min-h-screen p-8">
       {" "}
@@ -156,29 +193,31 @@ const Kitchen = () => {
       </h1>{" "}
       <div className="grid grid-cols-3 gap-6">
         {" "}
-        {orders.map((order) => (
+        {displayOrders.map((order) => (
           <div
             key={order.id}
-            className={`bg-gray-700 p-4 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors duration-300
-            ${isLate(order.elapsedTime) ? "animate-pulse bg-red-900" : ""}
+            className={`p-4 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors duration-300
+            ${
+              order.onHold
+                ? "bg-slate-900"
+                : isLate(order.elapsedTime)
+                ? "animate-pulse bg-red-900"
+                : "bg-gray-700"
+            }
             ${urgentOrders.includes(order.id) ? "urgent-order" : ""}
-            ${order.onHold ? "bg-gray-500" : ""} // Light grey for held orders
             `}
             onClick={() => handleOrderClick(order)}
           >
             {" "}
             <h2 className="text-xl font-semibold text-white mb-2">
-              Order #{order.order_id.slice(0, 3)}{" "}
+              Order #{order.order_id.slice(0, 3)} {" "}
               {urgentOrders.includes(order.id) && (
                 <span className="ml-2 text-gray-100">
                   <span className="animate-ping">🔥</span> Urgent Order{" "}
                   <span className="animate-ping">🔥</span>{" "}
                 </span>
-              )}
-              {/* Add the On Hold label */}{" "}
-              {order.onHold && (
-                <span className="ml-2 text-gray-300">On Hold</span>
               )}{" "}
+              {order.onHold && <span className="mr-2">🚫Hold🚫</span>}{" "}
             </h2>{" "}
             <ul className="text-gray-300 mb-4">
               {" "}
@@ -207,15 +246,18 @@ const Kitchen = () => {
                 }`}
               >
                 {" "}
-                {urgentOrders.includes(order.id) ? "Pushed" : "Push"}{" "}
+                {urgentOrders.includes(order.id) ? "Unpush" : "Push"}{" "}
               </button>{" "}
               <button
                 onClick={() => handleHold(order.id)}
                 className={`px-2 py-1 text-xs rounded ${
-                  order.onHold ? "bg-gray-400" : "bg-gray-600 hover:bg-gray-500"
+                  order.onHold // Corrected condition to check order.onHold
+                    ? "bg-gray-400" // Style for "Unhold"
+                    : "bg-gray-600 hover:bg-gray-500" // Style for "Hold"
                 }`}
               >
-                {order.onHold ? "Unhold" : "Hold"}{" "}
+                {order.onHold ? "Unhold" : "Hold"}
+                {/* Toggle text based on onHold status */}{" "}
               </button>{" "}
             </div>{" "}
           </div>
@@ -252,7 +294,7 @@ const Kitchen = () => {
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300"
                 onClick={() => handleCallOut("en")}
               >
-                Call-out (English){" "}
+                Call-out (English)  {" "}
               </button>{" "}
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300"
