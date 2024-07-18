@@ -1,54 +1,52 @@
 import React, { useState, useEffect, useRef } from "react";
 
-function KitchenOutput() {
+function KitchenOutput({ callOutInfo }) {
   const [number, setNumber] = useState("");
-  const audioFiles = useRef([]);
+  const audioFiles = useRef({});
   const audioQueue = useRef([]);
-
+  // All code are assisted by Copilot and Claude3.5
+  // English voice is from Envato elements
+  // Chinese voice is from Suey Kong our team member
   // Preload audio files
   useEffect(() => {
-    for (let i = 0; i <= 9; i++) {
-      //const audio = new Audio(`/audio/0${i}.mp3`);    //English
-      const audio = new Audio(`/audio/zh_${i}.mp3`); //Cantonese
-
-      audioFiles.current[i] = audio;
-    }
-    // Preload the 'pickup_eng.mp3'
-
-    //const pickupAudio = new Audio("/audio/en_pickup.mp3");    //English
-    const pickupAudio = new Audio("/audio/zh_pickup.mp3"); //Cantonese
-
-    audioFiles.current["pickup"] = pickupAudio; // Store it with a key for easy access
+    const languages = ['en', 'zh'];
+    languages.forEach(lang => {
+      audioFiles.current[lang] = {};
+      for (let i = 0; i <= 9; i++) {
+        const audio = new Audio(`/audio/${lang}_${i}.mp3`);
+        audioFiles.current[lang][i] = audio;
+      }
+      const pickupAudio = new Audio(`/audio/${lang}_pickup.mp3`);
+      audioFiles.current[lang]['pickup'] = pickupAudio;
+    });
   }, []);
 
   useEffect(() => {
-    const playNextAudio = () => {
-      if (audioQueue.current.length > 0) {
-        const audioKey = audioQueue.current.shift(); // This could now be a digit or 'pickup'
-        const audio = audioFiles.current[audioKey];
-        audio.play();
-        audio.onended = playNextAudio;
-      }
-    };
-
-    if (audioQueue.current.length === 4) {
-      // Start playing when all four are queued (including 'pickup')
-      playNextAudio();
+    if (callOutInfo) {
+      setNumber(callOutInfo.number);
+      queueAudio(callOutInfo.number, callOutInfo.lang);
     }
-  }, [number]); // Triggered when number changes
+  }, [callOutInfo]);
 
-  const handleGenerateNumber = () => {
-    const newNumber = Math.floor(100 + Math.random() * 900).toString(); // Generates a number between 100 and 999
-    setNumber(newNumber);
-    audioQueue.current = newNumber.split("").map((digit) => parseInt(digit));
-    audioQueue.current.push("pickup"); // Add 'pickup' to the queue after the numbers
+  const queueAudio = (num, lang) => {
+    audioQueue.current = num.split("").map((digit) => ({ lang, key: parseInt(digit) }));
+    audioQueue.current.push({ lang, key: 'pickup' });
+    playNextAudio();
+  };
+
+  const playNextAudio = () => {
+    if (audioQueue.current.length > 0) {
+      const { lang, key } = audioQueue.current.shift();
+      const audio = audioFiles.current[lang][key];
+      audio.play();
+      audio.onended = playNextAudio;
+    }
   };
 
   return (
-    <div>
-      <button onClick={handleGenerateNumber}>Generate Number</button>
-      <div className="text-xl text-white">Number: {number}</div>
-    </div>
+
+      <div className="text-xl text-white">Last Called Number: {number}</div>
+
   );
 }
 

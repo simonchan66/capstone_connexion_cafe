@@ -4,7 +4,7 @@ from smartcard.System import readers
 from smartcard.util import toHexString
 from smartcard.Exceptions import NoCardException
 from flask_cors import CORS
-
+# all code assisted by copilot and Claude 3.5
 app = Flask(__name__)
 CORS(app)
 
@@ -18,7 +18,7 @@ def connect_to_reader(reader):
             return connection
         except NoCardException:
             print("Waiting for card...")
-            time.sleep(1)  # Wait a second and try again
+            time.sleep(0.3)  # Wait a second and try again
 
 def send_apdu(connection, apdu):
     """ Send APDU command to the card and print the response. """
