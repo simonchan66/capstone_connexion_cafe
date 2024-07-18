@@ -71,5 +71,21 @@
   "orderDetails": "訂單記錄",
   "cash": "現金",
   "voucher": "預付卡",
-  "close": "關閉"
+  "close": "關閉",
+  "feedbackDashboard": "意見結果列表",
+  "allTime": "全部時間",
+  "overallScore": "整體評分",
+  "categoryPerformance": "分類評分",
+  "servingTimeDistribution": "等候時間分佈圖",
+  "topFavoriteItems": "最喜愛產品",
+  "recentPositiveFeedback": "最近正面評論",
+  "recentNegativeFeedback": "最近負面評論",
+  "browserDistribution": "瀏覽器分佈",
+  "collectedEmojis": "顧客感受",
+
+  "Vibe": "氣氛",
+  "Service": "服務",
+  "Product": "產品",
+  "Price": "價格",
+  "Cleanliness": "整潔"
   }

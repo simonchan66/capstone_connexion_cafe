@@ -74,8 +74,25 @@
     "items": "Items",
     "cash": "Cash",
     "voucher": "Voucher",
-    "close": "Close"
+    "close": "Close",
+
+    "feedbackDashboard": "Feedback Dashboard",
+    "allTime": "All Time",
+    "overallScore": "Overall Score",
+    "categoryPerformance": "Category Performance",
+    "servingTimeDistribution": "Serving Time Distribution",
+    "topFavoriteItems": "Top Favorite Items",
+    "recentPositiveFeedback": "Recent Positive Feedback",
+    "recentNegativeFeedback": "Recent Negative Feedback",
+    "browserDistribution": "Browser Distribution",
+    "collectedEmojis": "Collected Emojis",
 
 
 
+
+    "Vibe": "Vibe",
+    "Service": "Service",
+    "Product": "Product",
+    "Price": "Price",
+    "Cleanliness": "Cleanliness"
     }
