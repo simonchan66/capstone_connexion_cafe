@@ -196,7 +196,7 @@ const Kitchen = () => {
         {displayOrders.map((order) => (
           <div
             key={order.id}
-            className={`p-4 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors duration-300
+            className={`p-4 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors duration-300 relative
             ${
               order.onHold
                 ? "bg-slate-900"
@@ -217,7 +217,7 @@ const Kitchen = () => {
                   <span className="animate-ping">🔥</span>{" "}
                 </span>
               )}{" "}
-              {order.onHold && <span className="mr-2">🚫Hold🚫</span>}{" "}
+              {order.onHold && <span className="mr-2"></span>}{" "}
             </h2>{" "}
             <ul className="text-gray-300 mb-4">
               {" "}
@@ -264,6 +264,14 @@ const Kitchen = () => {
                 {order.onHold ? "Unhold" : "Hold"}
               </button>
             </div>{" "}
+            {order.onHold && (
+              <div
+                className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-80"
+                style={{ height: 100, top: "5%" }}
+              >
+                <span className="text-white text-4xl">ON HOLD</span>
+              </div>
+            )}
           </div>
         ))}{" "}
       </div>{" "}
