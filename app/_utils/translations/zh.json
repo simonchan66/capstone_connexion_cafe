@@ -71,5 +71,13 @@
   "orderDetails": "訂單記錄",
   "cash": "現金",
   "voucher": "預付卡",
-  "close": "關閉"
+  "close": "關閉",
+  "report": "報告",
+  "reportFor": "報告",
+"stats":"統計",
+"totalAmount":"總金額",
+"totalVoucher":"總預付卡",
+"totalCash":"總現金",
+"product":"產品",
+"generatePDF":"輸出PDF"
   }
