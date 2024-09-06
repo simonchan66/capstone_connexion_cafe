@@ -104,6 +104,8 @@
     "Price": "Price",
     "Cleanliness": "Cleanliness",
 
+  "insufficientPayment": "Insufficient payment amount.",
+  "change": "Changes",
 
     "translateFunctionDemonstration": "Translate Function Demonstration",
     "englishOnly":"You can read me =]"

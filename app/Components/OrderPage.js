@@ -16,7 +16,7 @@ const OrderPage = () => {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
   const [orderItems, setOrderItems] = useState([]);
-
+  const [change, setChange] = useState(0);
   const { t } = useLanguage();
 
   // it's used for updating the current date every second
@@ -133,13 +133,22 @@ const OrderPage = () => {
     setCashAmount(0);
     setVoucherAmount(0);
   };
-
   const handleCashAmountChange = (e) => {
-    setCashAmount(parseFloat(e.target.value));
+    const newCashAmount = parseFloat(e.target.value) || 0;
+    setCashAmount(newCashAmount);
+    updateChange(newCashAmount, voucherAmount);
   };
 
   const handleVoucherAmountChange = (e) => {
-    setVoucherAmount(parseFloat(e.target.value));
+    const newVoucherAmount = parseFloat(e.target.value) || 0;
+    setVoucherAmount(newVoucherAmount);
+    updateChange(cashAmount, newVoucherAmount);
+  };
+
+  const updateChange = (cash, voucher) => {
+    const totalPayment = cash + voucher;
+    const newChange = totalPayment - totalAmount;
+    setChange(newChange >= 0 ? newChange : 0);
   };
 
   // confirm payment and send data to firestore
@@ -153,39 +162,45 @@ const OrderPage = () => {
       const order_id = `${transaction_time.getSeconds()}${transaction_time.getMinutes()}${transaction_time.getHours()}${
         transaction_time.getMonth() + 1
       }${transaction_time.getDate()}${transaction_time.getFullYear()}`;
-
+  
       const order_items = cart.map((item) => ({
         item_name: item.name,
         quantity: item.quantity,
+        price: item.price,
       }));
-
+  
+      // Calculate the actual amounts paid, using voucher first
+      let actualVoucherAmount = Math.min(voucherAmount, totalAmount);
+      let actualCashAmount = Math.min(cashAmount, totalAmount - actualVoucherAmount);
+  
       const transactionData = {
         order_id,
         order_items,
         total_amount: totalAmount,
-        cash_amount: cashAmount,
-        voucher_amount: voucherAmount,
+        cash_amount: actualCashAmount,
+        voucher_amount: actualVoucherAmount,
         // will use other user data in the future
         user_name: "default",
         transaction_time: transaction_time.toISOString(),
         done: false,
       };
-
+  
       try {
         const db = getFirestore();
         const transactionsRef = collection(db, "transactions");
         await addDoc(transactionsRef, transactionData);
         console.log("Transaction added to Firestore");
-
+  
         // Extract the first 3 numbers of the order ID, which is the time of transaction
         const orderNumber = order_id.slice(0, 3);
         setOrderNumber(orderNumber);
         setOrderItems(order_items);
         setShowOrderSummary(true);
+        setChange(totalPayment - totalAmount); // Set the correct change amount
       } catch (error) {
         console.error("Error adding transaction to Firestore:", error);
       }
-
+  
       // Reset state variables
       console.log("Payment confirmed");
       setCheckoutClicked(false);
@@ -194,7 +209,7 @@ const OrderPage = () => {
       setCashAmount(0);
       setVoucherAmount(0);
     } else {
-      alert("Insufficient payment amount.");
+      alert(t("insufficientPayment"));
     }
   };
 
@@ -226,7 +241,7 @@ const OrderPage = () => {
         <h1 className="page-heading-1">{t("connexionCafe")}</h1>
         <p>{currentDate.toLocaleString()}</p>
       </header>
-
+  
       <div className="order-content">
         {!checkoutClicked ? (
           <>
@@ -270,7 +285,7 @@ const OrderPage = () => {
                           >
                             +
                           </button>
-
+  
                           <button
                             className="adj-btn"
                             onClick={() =>
@@ -279,7 +294,7 @@ const OrderPage = () => {
                           >
                             -
                           </button>
-
+  
                           <button
                             className="remove-btn"
                             onClick={() => removeProduct(cartProduct)}
@@ -296,7 +311,7 @@ const OrderPage = () => {
                   )}
                 </tbody>
               </table>
-
+  
               <h3>
                 {t("totalAmount")}: ${totalAmount.toFixed(2)}
               </h3>
@@ -311,14 +326,19 @@ const OrderPage = () => {
           </>
         ) : (
           <div className="payment-section bg-gray-800 p-6 rounded-lg text-white max-w-md mx-auto">
-            <h2 className="text-xl font-semibold mb-4">{t("payment")}</h2>
-            <div>
-              <p className="mb-2">{t("paymentDetails")}:</p>
-              <p className="mb-2">
-                {t("totalAmount")}: ${totalAmount.toFixed(2)}
-              </p>
+            <h2 className="text-2xl font-semibold mb-6 text-center">{t("payment")}</h2>
+            <div className="mb-6">
+              <div className="bg-gray-700 p-4 rounded-lg mb-4">
+                <p className="text-lg mb-2">{t("paymentDetails")}:</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-semibold">{t("totalAmount")}:</span>
+                  <span className="text-2xl font-bold text-green-400">
+                    ${totalAmount.toFixed(2)}
+                  </span>
+                </div>
+              </div>
               <div className="mb-4">
-                <label htmlFor="cashAmount" className="block mb-1">
+                <label htmlFor="cashAmount" className="block mb-1 text-sm">
                   {t("amountPaidByCash")}:
                 </label>
                 <input
@@ -326,11 +346,11 @@ const OrderPage = () => {
                   id="cashAmount"
                   value={cashAmount}
                   onChange={handleCashAmountChange}
-                  className="bg-black text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-700 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div className="mb-4">
-                <label htmlFor="voucherAmount" className="block mb-1">
+                <label htmlFor="voucherAmount" className="block mb-1 text-sm">
                   {t("amountPaidByVoucher")}:
                 </label>
                 <input
@@ -338,41 +358,50 @@ const OrderPage = () => {
                   id="voucherAmount"
                   value={voucherAmount}
                   onChange={handleVoucherAmountChange}
-                  className="bg-black text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-gray-700 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <span className="text-xl font-semibold">{t("change")}:</span>
+                  <span className="text-2xl font-bold text-yellow-400">
+                    ${change.toFixed(2)}
+                  </span>
+                </div>
+              </div>
             </div>
-
-            {/* Buttons */}
-            <div className="flex justify-end">
+  
+            <div className="flex justify-end space-x-4">
               <button
                 onClick={handleCancel}
-                className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-500 transition-colors duration-300 mr-2"
+                className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors duration-300"
               >
                 {t("cancel")}
               </button>
               <button
                 onClick={handleConfirmPayment}
-                className="checkout-btn text-white px-4 py-2 rounded-md transition-colors duration-300"
-                disabled={cashAmount + voucherAmount !== totalAmount}
+                className="checkout-btn text-white px-6 py-2 rounded-md transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={cashAmount + voucherAmount < totalAmount}
               >
                 {t("confirmPayment")}
               </button>
             </div>
-
-            <div>
-              {cashAmount + voucherAmount !== totalAmount && (
-                <p className="text-red-500 mb-4">{t("errorTotalAmount")}</p>
+  
+            <div className="mt-4">
+              {cashAmount + voucherAmount < totalAmount && (
+                <p className="text-red-500 text-center">{t("insufficientPayment")}</p>
               )}
             </div>
           </div>
         )}
-
+  
         {showOrderSummary && (
           <OrderSummary
             orderNumber={orderNumber}
             orderItems={orderItems}
             onContinue={handleContinue}
+            changeAmount={change}
+
           />
         )}
       </div>
