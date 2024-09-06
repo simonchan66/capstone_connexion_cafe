@@ -13,7 +13,6 @@ import {
 } from "firebase/firestore";
 
 const RestaurantFeedbackForm = () => {
-
   const moodOptions = ["😍", "😊", "😑", "☹️", "🤮"];
 
   const [formData, setFormData] = useState({
@@ -81,10 +80,6 @@ const RestaurantFeedbackForm = () => {
     // Check if serving time is empty
     if (formData.servingTime === "") {
       newErrors.servingTime = "Please select a serving time.";
-    }
-    // Check if favorite items are empty
-    if (formData.favoriteItems.length === 0) {
-      newErrors.favoriteItems = "Please select at least one favorite item.";
     }
 
     // Check if a mood emoji is selected

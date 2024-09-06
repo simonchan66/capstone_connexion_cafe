@@ -75,6 +75,7 @@
     "cash": "Cash",
     "voucher": "Voucher",
     "close": "Close",
+
     "report": "Report",
 "reportFor": "Report for",
 "stats":"Statistics",
@@ -84,8 +85,29 @@
 "product":"Product",
 "generatePDF":"Generate PDF",
 
-  "insufficientPayment": "Insufficient payment amount.",
-  "change": "Changes"
+    "feedbackDashboard": "Feedback Dashboard",
+    "allTime": "All Time",
+    "overallScore": "Overall Score",
+    "categoryPerformance": "Category Performance",
+    "servingTimeDistribution": "Serving Time Distribution",
+    "topFavoriteItems": "Top Favorite Items",
+    "recentPositiveFeedback": "Recent Positive Feedback",
+    "recentNegativeFeedback": "Recent Negative Feedback",
+    "browserDistribution": "Browser Distribution",
+    "collectedEmojis": "Collected Emojis",
+    "time": "Time",
+    "emoji": "Emoji",
+    "sortBy": "Sort By",
+    "Vibe": "Vibe",
+    "Service": "Service",
+    "Product": "Product",
+    "Price": "Price",
+    "Cleanliness": "Cleanliness",
 
+  "insufficientPayment": "Insufficient payment amount.",
+  "change": "Changes",
+
+    "translateFunctionDemonstration": "Translate Function Demonstration",
+    "englishOnly":"You can read me =]"
 
     }
