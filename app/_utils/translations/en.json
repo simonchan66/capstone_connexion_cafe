@@ -82,8 +82,10 @@
 "totalVoucher":"Total Voucher",
 "totalCash":"Total Cash",
 "product":"Product",
-"generatePDF":"Generate PDF"
+"generatePDF":"Generate PDF",
 
+  "insufficientPayment": "Insufficient payment amount.",
+  "change": "Changes"
 
 
     }

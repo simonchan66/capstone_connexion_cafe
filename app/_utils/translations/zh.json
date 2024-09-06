@@ -79,5 +79,7 @@
 "totalVoucher":"總預付卡",
 "totalCash":"總現金",
 "product":"產品",
-"generatePDF":"輸出PDF"
+"generatePDF":"輸出PDF",
+  "change": "找錢",
+  "insufficientPayment": "付款金額不足"
   }
