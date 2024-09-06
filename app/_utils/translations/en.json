@@ -75,6 +75,16 @@
     "cash": "Cash",
     "voucher": "Voucher",
     "close": "Close",
+
+    "report": "Report",
+"reportFor": "Report for",
+"stats":"Statistics",
+"totalAmount":"Total Amount",
+"totalVoucher":"Total Voucher",
+"totalCash":"Total Cash",
+"product":"Product",
+"generatePDF":"Generate PDF",
+
     "feedbackDashboard": "Feedback Dashboard",
     "allTime": "All Time",
     "overallScore": "Overall Score",

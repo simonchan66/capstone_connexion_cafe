@@ -1,5 +1,4 @@
 import { useLanguage } from "../_utils/LanguageContext";
-
 const OrderSummary = ({ orderNumber, orderItems, onContinue }) => {
   const { t } = useLanguage();
   return (

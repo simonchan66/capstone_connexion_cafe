@@ -35,6 +35,9 @@ const Navigation = () => {
         <li>
           <Link href="/FeedbackDash">{t("dashboard")}</Link>
         </li>
+        <li>
+          <Link href="/Report">{t("report")}</Link>
+        </li>
 
         <li>
           <button
