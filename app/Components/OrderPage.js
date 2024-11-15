@@ -27,7 +27,39 @@ const OrderPage = () => {
 
     return () => clearInterval(interval); // Clean up the interval on component unmount
   }, []);
+  const handleReset = () => {
+    setCashAmount(0);
+    setVoucherAmount(0);
+    updateChange(0, 0);
+  };
 
+  const handleAllCash = () => {
+    setCashAmount(totalAmount);
+    setVoucherAmount(0);
+    updateChange(totalAmount, 0);
+  };
+
+  const handleAllVoucher = () => {
+    setCashAmount(0);
+    setVoucherAmount(totalAmount);
+    updateChange(0, totalAmount);
+  };
+
+  const handleCashIncrement = (amount) => {
+    const newAmount = Math.max(0, cashAmount + amount);
+    setCashAmount(newAmount);
+    updateChange(newAmount, voucherAmount);
+  };
+
+  const handleVoucherIncrement = (amount) => {
+    const newAmount = Math.min(
+      Math.max(0, voucherAmount + amount),
+      totalAmount
+    );
+    setVoucherAmount(newAmount);
+    updateChange(cashAmount, newAmount);
+  };
+  
   const addProductToCart = async (product) => {
     // check if the adding product exists
     let findProductInCart = await cart.find((i) => {
@@ -134,13 +166,36 @@ const OrderPage = () => {
     setVoucherAmount(0);
   };
   const handleCashAmountChange = (e) => {
-    const newCashAmount = parseFloat(e.target.value) || 0;
+    const value = e.target.value;
+    // If empty or non-numeric, set to 0
+    if (value === '' || isNaN(value)) {
+      setCashAmount(0);
+      updateChange(0, voucherAmount);
+      return;
+    }
+    
+    const newCashAmount = Math.max(0, parseFloat(value));
     setCashAmount(newCashAmount);
     updateChange(newCashAmount, voucherAmount);
   };
 
+  // Modified voucher amount handler to prevent negative values and exceed total amount
   const handleVoucherAmountChange = (e) => {
-    const newVoucherAmount = parseFloat(e.target.value) || 0;
+    const value = e.target.value;
+    // If empty or non-numeric, set to 0
+    if (value === '' || isNaN(value)) {
+      setVoucherAmount(0);
+      updateChange(cashAmount, 0);
+      return;
+    }
+    
+    // Limit voucher amount to not exceed total amount
+    const parsedValue = parseFloat(value);
+    const newVoucherAmount = Math.min(
+      Math.max(0, parsedValue), // Ensure non-negative
+      totalAmount // Limit to total amount
+    );
+    
     setVoucherAmount(newVoucherAmount);
     updateChange(cashAmount, newVoucherAmount);
   };
@@ -226,14 +281,13 @@ const OrderPage = () => {
   };
 
   useEffect(() => {
-    // Calculate new total amount
     const newTotalAmount = cart.reduce(
       (acc, curr) => acc + curr.totalAmount,
       0
     );
     setTotalAmount(newTotalAmount);
-    setCashAmount(newTotalAmount); // Set cash amount to total amount
-  }, [cart]); // Update total amount when cart changes
+    // Removed the automatic setting of cash amount
+  }, [cart]);
 
   return (
     <div className="order-page">
@@ -325,74 +379,150 @@ const OrderPage = () => {
             </div>
           </>
         ) : (
-          <div className="payment-section bg-gray-800 p-6 rounded-lg text-white max-w-md mx-auto">
-            <h2 className="text-2xl font-semibold mb-6 text-center">{t("payment")}</h2>
-            <div className="mb-6">
-              <div className="bg-gray-700 p-4 rounded-lg mb-4">
-                <p className="text-lg mb-2">{t("paymentDetails")}:</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-xl font-semibold">{t("totalAmount")}:</span>
-                  <span className="text-2xl font-bold text-green-400">
-                    ${totalAmount.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-              <div className="mb-4">
-                <label htmlFor="cashAmount" className="block mb-1 text-sm">
-                  {t("amountPaidByCash")}:
-                </label>
-                <input
-                  type="number"
-                  id="cashAmount"
-                  value={cashAmount}
-                  onChange={handleCashAmountChange}
-                  className="w-full bg-gray-700 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="mb-4">
-                <label htmlFor="voucherAmount" className="block mb-1 text-sm">
-                  {t("amountPaidByVoucher")}:
-                </label>
-                <input
-                  type="number"
-                  id="voucherAmount"
-                  value={voucherAmount}
-                  onChange={handleVoucherAmountChange}
-                  className="w-full bg-gray-700 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div className="bg-gray-700 p-4 rounded-lg">
-                <div className="flex justify-between items-center">
-                  <span className="text-xl font-semibold">{t("change")}:</span>
-                  <span className="text-2xl font-bold text-yellow-400">
-                    ${change.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-            </div>
-  
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={handleCancel}
-                className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors duration-300"
-              >
-                {t("cancel")}
-              </button>
-              <button
-                onClick={handleConfirmPayment}
-                className="checkout-btn text-white px-6 py-2 rounded-md transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={cashAmount + voucherAmount < totalAmount}
-              >
-                {t("confirmPayment")}
-              </button>
-            </div>
-  
-            <div className="mt-4">
-              {cashAmount + voucherAmount < totalAmount && (
-                <p className="text-red-500 text-center">{t("insufficientPayment")}</p>
-              )}
-            </div>
-          </div>
+          <div className="payment-section w-full max-w-xl mx-auto bg-gray-800 p-8 rounded-lg text-white">
+  <div className="text-center mb-6">
+    <p className="text-xl">Total Amount: <span className="text-green-400">${totalAmount.toFixed(2)}</span></p>
+  </div>
+
+  <div className="grid grid-cols-2 gap-8">
+    {/* Left side - Cash */}
+    <div className="flex flex-col items-center space-y-4">
+      <div className="w-full space-y-2">
+        <button 
+          onClick={() => handleCashIncrement(10)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md w-full"
+        >
+        X10
+        </button>
+        <button 
+          onClick={() => handleCashIncrement(1)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md w-full"
+        >
+          ↑
+        </button>
+      </div>
+      
+      <div className="text-center">
+        <label className="block text-lg mb-2">Cash:</label>
+        <input
+          type="number"
+          value={cashAmount}
+          onChange={handleCashAmountChange}
+          min="0"
+          step="0.01"
+          className="w-24 bg-gray-700 text-white px-3 py-2 rounded-md text-center"
+        />
+      </div>
+
+      <div className="w-full space-y-2">
+        <button 
+          onClick={() => handleCashIncrement(-1)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md w-full"
+        >
+          ↓
+        </button>
+        <button 
+          onClick={() => handleCashIncrement(-10)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md w-full"
+        >
+          X10
+        </button>
+      </div>
+    </div>
+
+    {/* Right side - Voucher */}
+    <div className="flex flex-col items-center space-y-4">
+      <div className="w-full space-y-2">
+        <button 
+          onClick={() => handleVoucherIncrement(10)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md w-full"
+        >
+          X10
+        </button>
+        <button 
+          onClick={() => handleVoucherIncrement(1)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md w-full"
+        >
+          ↑
+        </button>
+      </div>
+
+      <div className="text-center">
+        <label className="block text-lg mb-2">Voucher:</label>
+        <input
+          type="number"
+          value={voucherAmount}
+          onChange={handleVoucherAmountChange}
+          min="0"
+          max={totalAmount}
+          step="0.01"
+          className="w-24 bg-gray-700 text-white px-3 py-2 rounded-md text-center"
+        />
+      </div>
+
+      <div className="w-full space-y-2">
+        <button 
+          onClick={() => handleVoucherIncrement(-1)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md w-full"
+        >
+          ↓
+        </button>
+        <button 
+          onClick={() => handleVoucherIncrement(-10)}
+          className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md w-full"
+        >
+          X10
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div className="mt-8 grid grid-cols-3 gap-4">
+    <button
+      onClick={handleAllCash}
+      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+    >
+      All Cash
+    </button>
+    <button
+      onClick={handleAllVoucher}
+      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+    >
+      All Voucher
+    </button>
+    <button
+      onClick={handleReset}
+      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+    >
+      Reset
+    </button>
+  </div>
+
+  <div className="mt-6 bg-gray-700 p-4 rounded-lg">
+    <div className="flex justify-between items-center">
+      <span className="text-xl font-semibold">Change:</span>
+      <span className="text-2xl font-bold text-yellow-400">
+        ${change.toFixed(2)}
+      </span>
+    </div>
+  </div>
+
+  <div className="mt-6 flex justify-between">
+    <button
+      onClick={handleCancel}
+      className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md"
+    >
+      Cancel
+    </button>
+    <button
+      onClick={handleConfirmPayment}
+      className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+      disabled={cashAmount + voucherAmount < totalAmount || voucherAmount > totalAmount}
+    >
+      Confirm Payment
+    </button>
+  </div>
+</div>
         )}
   
         {showOrderSummary && (
